@@ -24,3 +24,75 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* home-hero */
+.hero_root {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.hero_bg {
+  position: absolute;
+  inset: 0;
+}
+
+.hero_back {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero_house {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.hero_clouds .cloud {
+  position: absolute;
+  top: 20%;
+  opacity: 0.8;
+}
+
+.cloud.left {
+  left: 0;
+}
+
+.cloud.right {
+  right: 0;
+}
+
+.hero_smoke {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.hero_content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  top: 40%;
+  transform: translateY(-40%);
+  color: white;
+}
+
+.hero_title span {
+  margin: 0 6px;
+  display: inline-block;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.hero_text {
+  margin-top: 16px;
+}
+
+.primary_btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+}
