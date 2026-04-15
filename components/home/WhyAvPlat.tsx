@@ -2,6 +2,12 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Apple, Play } from "lucide-react";
+
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.avplat.aviation&pcampaignid=web_share.aviation&pcampaignid=web_share";
+const APP_STORE_URL =
+  "https://apps.apple.com/us/app/avplat/id1369917026";
 
 export default function WhyAvPlat() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,28 +18,29 @@ export default function WhyAvPlat() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 0.9", "end 0.1"], // tighter scroll range
+    offset: ["start 0.9", "end 0.1"],
   });
 
   return (
     <section
       ref={containerRef}
-      className="bg-white"
-      style={{ height: "50vh" }} // 👈 LIMIT HEIGHT
+      className="bg-white flex items-center px-6 md:px-0 sm:px-5"
+      style={{ height: "60vh" }} // slightly increased for buttons
     >
-      {/* GRID */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto h-full items-center">
-        
-        {/* LEFT SMALL HEADING */}
+
+        {/* LEFT */}
         <div className="md:col-span-1">
           <p className="text-sm text-gray-700 tracking-wide">
             Why AvPlat
           </p>
         </div>
 
-        {/* RIGHT BIG TEXT */}
-        <div className="md:col-span-2">
-          <h6 className="text-xl md:text-2xl font-medium leading-tight flex flex-wrap">
+        {/* RIGHT */}
+        <div className="md:col-span-2 flex flex-col justify-center">
+
+          {/* TEXT */}
+          <h4 className="text-xl md:text-3xl font-normal leading-tight flex flex-wrap">
             {words.map((word, i) => {
               const start = i / words.length;
               const end = start + 1 / words.length;
@@ -54,9 +61,36 @@ export default function WhyAvPlat() {
                 </motion.span>
               );
             })}
-          </h6>
-        </div>
+          </h4>
 
+          {/* BUTTONS */}
+          <div className="flex flex-wrap gap-4 mt-6">
+
+            {/* App Store */}
+            <a
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-5 py-3 rounded-full border border-black text-white bg-black hover:bg-white hover:text-black transition-all duration-300"
+            >
+              <Apple size={18} />
+              <span className="text-sm font-medium">App Store</span>
+            </a>
+
+            {/* Play Store */}
+            <a
+              href={PLAY_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-5 py-3 rounded-full border border-black text-white bg-black hover:bg-white hover:text-black transition-all duration-300"
+            >
+              <Play size={18} />
+              <span className="text-sm font-medium">Play Store</span>
+            </a>
+
+          </div>
+
+        </div>
       </div>
     </section>
   );
