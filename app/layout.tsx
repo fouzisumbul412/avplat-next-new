@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     "AvPlat is the world's first integrated flight planning and trip support software.",
   keywords: ["aviation", "flight planning", "charter", "trip support"],
   icons: {
-    icon: "/images/av-favicon.jpeg",
+    icon: "/images/av-favicon.png",
   },
 };
 

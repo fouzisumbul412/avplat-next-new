@@ -31,9 +31,9 @@ export default function WhyAvPlat() {
 
         {/* LEFT */}
         <div className="md:col-span-1">
-          <p className="text-sm text-gray-700 tracking-wide">
+          <h2 className="text-4xl text-[#213e76] tracking-wide font-semibold">
             Why AvPlat
-          </p>
+          </h2>
         </div>
 
         {/* RIGHT */}
@@ -48,7 +48,7 @@ export default function WhyAvPlat() {
               const color = useTransform(
                 scrollYProgress,
                 [start, end],
-                ["#c7c7c7", "#000000"]
+                ["#000000", "#213e76"]
               );
 
               return (
@@ -71,7 +71,7 @@ export default function WhyAvPlat() {
               href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-3 rounded-full border border-black text-white bg-black hover:bg-white hover:text-black transition-all duration-300"
+              className="flex items-center gap-2 px-5 py-3 rounded-full border border-[#213e76] text-white bg-[#213e76] hover:bg-white hover:text-black hover:border-black transition-all duration-300"
             >
               <Apple size={18} />
               <span className="text-sm font-medium">App Store</span>
@@ -82,7 +82,7 @@ export default function WhyAvPlat() {
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-3 rounded-full border border-black text-white bg-black hover:bg-white hover:text-black transition-all duration-300"
+              className="flex items-center gap-2 px-5 py-3 rounded-full border border-[#213e76] text-white bg-[#213e76] hover:bg-white hover:text-black hover:border-black transition-all duration-300"
             >
               <Play size={18} />
               <span className="text-sm font-medium">Play Store</span>

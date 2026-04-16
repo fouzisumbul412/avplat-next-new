@@ -204,8 +204,8 @@ export default function Hero() {
 
       gsap.set(".hero-cta-floating", {
         opacity: 0,
-        y: 26,
-        scale: 0.9,
+        y: 24,
+        scale: 0.92,
         pointerEvents: "none",
         force3D: true,
       });
@@ -234,51 +234,51 @@ export default function Hero() {
           trigger: root,
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.15,
+          scrub: 0.8,
           invalidateOnRefresh: true,
         },
       });
 
-      tl.to(".house-wrap", { yPercent: -9, scale: 1.085, duration: 0.52 }, 0.18);
+      tl.to(".house-wrap", { yPercent: -9, scale: 1.085, duration: 0.34 }, 0.08);
 
-      tl.to(".hero-copy", { opacity: 0.55, duration: 0.12 }, 0.05);
-      tl.to(".top-mist-left", { xPercent: -10, opacity: 0.16, duration: 0.22 }, 0.04);
-      tl.to(".top-mist-right", { xPercent: 10, opacity: 0.16, duration: 0.22 }, 0.04);
+      tl.to(".hero-copy", { opacity: 0.55, duration: 0.08 }, 0.03);
+      tl.to(".top-mist-left", { xPercent: -10, opacity: 0.16, duration: 0.14 }, 0.03);
+      tl.to(".top-mist-right", { xPercent: 10, opacity: 0.16, duration: 0.14 }, 0.03);
 
-      tl.to(".hero-copy", { opacity: 0, y: -20, duration: 0.14 }, 0.18);
-      tl.to(".fog-soft", { yPercent: 7, opacity: 0.94, duration: 0.2 }, 0.18);
+      tl.to(".hero-copy", { opacity: 0, y: -18, duration: 0.1 }, 0.12);
+      tl.to(".fog-soft", { yPercent: 7, opacity: 0.94, duration: 0.14 }, 0.12);
 
-      tl.to(".outline-wrap", { opacity: 1, duration: 0.06 }, 0.27);
+      tl.to(".outline-wrap", { opacity: 1, duration: 0.04 }, 0.18);
 
-      tl.to([outlineText, outlineGlow], { strokeDashoffset: textLength * 0.84, duration: 0.18 }, 0.3);
-      tl.to([outlineText, outlineGlow], { strokeDashoffset: textLength * 0.62, duration: 0.22 }, 0.5);
-      tl.to([outlineText, outlineGlow], { strokeDashoffset: textLength * 0.34, duration: 0.24 }, 0.72);
-      tl.to([outlineText, outlineGlow], { strokeDashoffset: 0, duration: 0.28 }, 0.98);
+      tl.to([outlineText, outlineGlow], { strokeDashoffset: textLength * 0.84, duration: 0.12 }, 0.22);
+      tl.to([outlineText, outlineGlow], { strokeDashoffset: textLength * 0.62, duration: 0.14 }, 0.36);
+      tl.to([outlineText, outlineGlow], { strokeDashoffset: textLength * 0.34, duration: 0.14 }, 0.52);
+      tl.to([outlineText, outlineGlow], { strokeDashoffset: 0, duration: 0.14 }, 0.68);
 
-      tl.to(".wash-layer", { opacity: 0.24, duration: 0.16 }, 0.76);
-      tl.to(".fog-heavy", { opacity: 0.54, yPercent: 12, duration: 0.18 }, 0.78);
-      tl.to(".base-fade", { opacity: 0.6, duration: 0.18 }, 0.8);
+      tl.to(".wash-layer", { opacity: 0.24, duration: 0.1 }, 0.56);
+      tl.to(".fog-heavy", { opacity: 0.54, yPercent: 12, duration: 0.12 }, 0.58);
+      tl.to(".base-fade", { opacity: 0.6, duration: 0.12 }, 0.6);
 
-      tl.to(".masked-wrap", { opacity: 1, duration: 0.2 }, 1.04);
-      tl.to(".outline-wrap", { opacity: 0, duration: 0.12 }, 1.08);
+      tl.to(".masked-wrap", { opacity: 1, duration: 0.14 }, 0.82);
+      tl.to(".outline-wrap", { opacity: 0, duration: 0.08 }, 0.84);
 
-      tl.to(".base-fade", { opacity: 0.18, duration: 0.24 }, 1.12);
-      tl.to(".wash-layer", { opacity: 0.12, duration: 0.18 }, 1.14);
-      tl.to(".fog-soft", { yPercent: -16, scale: 1.06, duration: 0.24 }, 1.1);
-      tl.to(".fog-heavy", { opacity: 1, yPercent: -8, scale: 1.14, duration: 0.24 }, 1.1);
+      tl.to(".base-fade", { opacity: 0.18, duration: 0.14 }, 0.9);
+      tl.to(".wash-layer", { opacity: 0.12, duration: 0.12 }, 0.9);
+      tl.to(".fog-soft", { yPercent: -16, scale: 1.06, duration: 0.14 }, 0.9);
+      tl.to(".fog-heavy", { opacity: 1, yPercent: -8, scale: 1.14, duration: 0.14 }, 0.9);
 
-      tl.set(".hero-cta-floating", { pointerEvents: "auto" }, 1.18);
-      tl.to(
-        ".hero-cta-floating",
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.18,
-          ease: "power3.out",
-        },
-        1.18
-      );
+tl.set(".hero-cta-floating", { pointerEvents: "auto" }, 0.32);
+tl.to(
+  ".hero-cta-floating",
+  {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    duration: 0.12,
+    ease: "power3.out",
+  },
+  0.32
+);
     }, root);
 
     return () => ctx.revert();
@@ -335,10 +335,10 @@ export default function Hero() {
               />
             </div>
 
-            <div className="hero-copy mt-20">
+            <div className="hero-copy">
               <div className="hero-copy-inner">
-                <h1 className="hero-title">Luxury in Air</h1>
-                <h1 className="hero-title">Personalised</h1>
+                <h1 className="hero-title">Luxury in Air <br></br> Personalised</h1>
+               
               </div>
             </div>
 
@@ -373,7 +373,7 @@ export default function Hero() {
             <div className="hero-cta hero-cta-floating">
               <button
                 type="button"
-                className="hero-button"
+                className="hero-button bg-[#213e76]"
                 onClick={() => setIsCharterSheetOpen(true)}
               >
                 <span>Book a Charter</span>
@@ -420,7 +420,7 @@ export default function Hero() {
         <style jsx>{`
           .hero-root {
             position: relative;
-            height: 430vh;
+            height: 240vh;
             background: #dcebf7;
           }
 
@@ -518,10 +518,10 @@ export default function Hero() {
           }
 
           .hero-title {
-            margin: 0;
-            color: #04080d;
-            font-size: clamp(3.2rem, 8.9vw, 5.9rem);
-            line-height: 1.25;
+            margin: 80px 0 0 0;
+            color: #213e76;
+            font-size: clamp(3.2rem, 8.9vw, 5rem);
+            line-height: 1;
             font-weight: 700;
           }
 
@@ -531,15 +531,33 @@ export default function Hero() {
             will-change: transform, opacity;
           }
 
-          .hero-cta-floating {
-            position: absolute;
-            left: 50%;
-            bottom: 10vh;
-            transform: translateX(-50%);
-            z-index: 20;
-            pointer-events: none;
-          }
+.hero-cta-floating {
+  position: absolute;
+  padding: 230px 0 0 0;
+  left: 50%;
+  top: 72%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  pointer-events: none;
+}
 
+@media (max-width: 1024px) {
+  .hero-cta-floating {
+    top: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-cta-floating {
+    top: 76%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-cta-floating {
+    top: 78%;
+  }
+}
           .hero-button {
             display: inline-flex;
             align-items: center;
@@ -550,7 +568,7 @@ export default function Hero() {
             padding: 0 30px;
             border: 0;
             border-radius: 999px;
-            background: #171b20;
+            background: #213e76;
             color: #fff;
             font-size: 0.98rem;
             font-weight: 600;
@@ -674,13 +692,13 @@ export default function Hero() {
             .brand-svg {
               width: min(92vw, 1620px);
             }
-
-            .hero-cta-floating {
-              bottom: 11vh;
-            }
           }
 
           @media (max-width: 1280px) {
+            .hero-root {
+              height: 220vh;
+            }
+
             .hero-copy-inner {
               width: min(1360px, calc(100% - 48px));
             }
@@ -694,15 +712,11 @@ export default function Hero() {
             .brand-svg {
               width: min(96vw, 1440px);
             }
-
-            .hero-cta-floating {
-              bottom: 10vh;
-            }
           }
 
           @media (max-width: 1024px) {
             .hero-root {
-              height: 400vh;
+              height: 210vh;
             }
 
             .hero-copy {
@@ -727,15 +741,11 @@ export default function Hero() {
               width: min(28vw, 260px);
               top: 10vh;
             }
-
-            .hero-cta-floating {
-              bottom: 9vh;
-            }
           }
 
           @media (max-width: 768px) {
             .hero-root {
-              height: 380vh;
+              height: 190vh;
             }
 
             .hero-copy {
@@ -790,15 +800,11 @@ export default function Hero() {
             .fog-heavy {
               height: 52vh;
             }
-
-            .hero-cta-floating {
-              bottom: 8vh;
-            }
           }
 
           @media (max-width: 480px) {
             .hero-root {
-              height: 360vh;
+              height: 175vh;
             }
 
             .hero-title {
@@ -821,10 +827,6 @@ export default function Hero() {
             .top-mist {
               width: 30vw;
               top: 13vh;
-            }
-
-            .hero-cta-floating {
-              bottom: 7vh;
             }
           }
         `}</style>

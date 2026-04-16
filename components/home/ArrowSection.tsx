@@ -4,10 +4,11 @@ import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { useRef } from "react";
 
 const images = [
-  "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-  "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85",
-  "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
-  "https://images.unsplash.com/photo-1501183638710-841dd1904471",
+  "/images/Plan.png",
+  "/images/Smart.png",
+  "/images/Estimates.png",
+  "/images/Activate.png",
+  "/images/Control.png",
 ];
 
 const arrowMask = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 346 440'%3E%3Cpath fill='black' d='M183.98 440 346 220 183.98 0H0l162.02 220L0 440h183.98Z'/%3E%3C/svg%3E")`;
@@ -25,7 +26,7 @@ const AnimatedWord = ({
   start,
   end,
 }: AnimatedWordProps) => {
-  const color = useTransform(progress, [start, end], ["#c7c7c7", "#000000"]);
+  const color = useTransform(progress, [start, end], ["#000000", "#213e76"]);
 
   return (
     <motion.span style={{ color }} className="mr-1 md:mr-2 mb-1 md:mb-2">
@@ -99,7 +100,7 @@ export default function ArrowSection() {
     offset: ["start 0.9", "end 0.2"],
   });
 
-  const text = `It’s about identity. Progress. Getting unstuck. You’re not just looking for a place. You’re looking for alignment. That’s what we help you find.`;
+  const text = `It’s about efficiency. Transparency. Total control. You’re not just managing a trip, you’re orchestrating every detail with confidence. That’s what AvPlat empowers you to do.`;
 
   const words = text.split(" ");
 
@@ -116,8 +117,8 @@ export default function ArrowSection() {
           viewport={{ once: false }}
           className="mb-10 text-center text-2xl font-semibold leading-tight sm:mb-12 sm:text-3xl md:mb-16 md:text-5xl"
         >
-          This isn’t just{" "}
-          <span className="text-gray-400">about real estate.</span>
+          This isn’t Just {" "}
+          <span className="text-[#213e76]">About Flight Operations</span>
         </motion.h2>
 
         <div className="mx-auto flex w-full items-center justify-center overflow-visible">

@@ -12,7 +12,11 @@ export default function ForAgentsSection() {
     offset: ["start 0.8", "end 0.2"],
   });
 
-  const text = `At FIND, our agents don’t just work for the brand—they own a part of it. We give top performers real equity, so they’re invested in more than just your transaction—they're invested in your outcome. Agents are certified, supported, and equipped to deliver five-star service—because their success is tied to yours. You’re not just here to close deals — you’re building a career, a life, a legacy. We help agents find the company that gives them the support, tools, and leadership to thrive.`;
+  const text = `At AvPlat, charter operators don’t just execute trips — they run them with complete control.
+From planning to payments, our platform gives you the tools to manage operations, optimize costs, and deliver seamless experiences at scale.
+
+Access a global network of services, automate workflows, and eliminate inefficiencies that slow you down.
+You’re not just completing flights — you’re building a smarter, more profitable operation with every trip.`;
 
   const words = text.split(" ");
 
@@ -24,7 +28,7 @@ export default function ForAgentsSection() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="hidden md:block">
-            <p className="text-sm text-gray-500 mb-6">For Agents</p>
+            <p className="text-sm text-gray-500 mb-6">For Charter Operators</p>
 
             <motion.div
               initial={{
@@ -59,11 +63,11 @@ export default function ForAgentsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-semibold leading-tight"
+              className="text-2xl md:text-3xl font-semibold leading-tight text-black"
             >
-              Don’t Rent Your Career.
+             Don’t Just Fly Missions.
               <br />
-              <span className="text-gray-400">Own It.</span>
+              <span className="text-[#213e76]">Own The Operation.</span>
             </motion.h2>
 
             <motion.div
@@ -100,7 +104,7 @@ export default function ForAgentsSection() {
                 const color = useTransform(
                   scrollYProgress,
                   [start, end],
-                  ["#c7c7c7", "#000000"]
+                  ["#000000", "#213e76"]
                 );
 
                 return (
@@ -121,9 +125,9 @@ export default function ForAgentsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition"
+              className="inline-flex items-center gap-3 bg-[#213e76] text-white px-6 py-3 rounded-full hover:bg-white hover:text-black hover:border-black transition"
             >
-              Join The Movement
+              Start Operating Smarter
               <ArrowRight size={18} />
             </motion.a>
           </div>

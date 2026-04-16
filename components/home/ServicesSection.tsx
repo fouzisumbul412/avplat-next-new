@@ -7,24 +7,38 @@ import { useState } from "react";
 const services = [
   {
     id: "01",
-    title: "Buy",
-    desc: "Buy smarter with expert agents backed by mortgage, legal, and appraisal pros—dialed in to get you the best deal, fast. We’ve done this over 10,000 times, and we know what wins.",
+    title: "Earn",
+    desc: "Stop chasing leads that go nowhere. Set your service rates once and let AvPlat automatically generate accurate estimates for the right customers — saving time and increasing conversions.",
     image:
-      "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
+      "/images/Earn.png",
   },
   {
     id: "02",
-    title: "Sell",
-    desc: "Sell fast, sell high. Your listing gets pro staging, strategic pricing, constant open houses, and agents who never stop working until the right buyer signs.",
+    title: "Accept",
+    desc: "Manage service requests effortlessly.Review, accept, and schedule jobs in one click — from fuel and catering to permits and handling — all in one unified platform.",
     image:
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
+      "/images/Accept.png",
   },
   {
     id: "03",
-    title: "Rent",
-    desc: "Access hidden rentals before they hit the market through agents who know every landlord in town. With decades of NYC experience, we unlock the best deals you won’t find online.",
+    title: "Manage",
+    desc: "Stay in control with real-time updates.Smart notifications, task tracking, and built-in communication keep every trip organized and every stakeholder aligned.",
     image:
-      "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
+      "/images/Manage.png",
+  },
+  {
+    id: "04",
+    title: "Adapt",
+    desc: "Handle changes without the chaos.Update schedules, services, or trip details anytime — the platform automatically syncs everything and keeps everyone informed.",
+    image:
+      "/images/Adapt.png",
+  },
+  {
+    id: "05",
+    title: "Get Paid",
+    desc: "Faster payments, zero follow-ups.Automated invoicing and scheduled settlements ensure predictable cash flow — without the usual back-and-forth.",
+    image:
+      "/images/GetPaid.png",
   },
   
 ];
@@ -40,14 +54,14 @@ export default function ServicesSection() {
         <div className="grid md:grid-cols-3 items-end">
           
           {/* LEFT */}
-          <p className="text-sm text-gray-400">Services</p>
+          <p className="text-xl text-gray-400">Services</p>
 
           {/* CENTER ALIGN WITH TITLES */}
           <div className="md:col-span-2 md:pl-[120px]">
             <h2 className="text-3xl md:text-6xl font-semibold leading-tight">
-              <span className="text-white">How FIND</span>
+              <span className="text-white">How AvPlat</span>
               <br />
-              <span className="text-gray-400">Can Help You</span>
+              <span className="text-gray-400">Empowers You</span>
             </h2>
           </div>
 
@@ -139,14 +153,14 @@ export default function ServicesSection() {
         {/* LEFT ALIGNED */}
         <div className="md:pl-[120px]">
           <p className="text-xl md:text-3xl text-gray-300 leading-snug max-w-3xl">
-            Our certified agents guide you through every stage of real estate{" "}
+            Power your services with a platform designed for speed, clarity, and growth.{" "}
             <span className="text-gray-500">
-              with expert knowledge and reliable support.
+             Join a smarter way to manage operations, reduce friction, and increase revenue.
             </span>
           </p>
 
           <button className="mt-8 flex items-center gap-3 border border-white/30 px-6 py-3 rounded-full hover:bg-white hover:text-black transition">
-            Get Started with FIND
+            Get Started with AvPlat
             <ArrowRight size={18} />
           </button>
         </div>

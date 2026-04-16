@@ -6,18 +6,28 @@ import { ArrowRight } from "lucide-react";
 const steps = [
   {
     id: "01",
-    title: "Talk to a Real Human.",
-    desc: "We match you with an expert who actually listens.",
+    title: "Plan Fast.",
+    desc: "Create your itinerary in seconds.",
   },
   {
     id: "02",
-    title: "Get Clarity.",
-    desc: "We define what you really need, not just what’s available.",
+    title: "Choose Smart.",
+    desc: "Compare services and pick the best options.",
   },
   {
     id: "03",
-    title: "Move Forward.",
-    desc: "We find what fits — and make it happen.",
+    title: "Get Estimates.",
+    desc: "Instant pricing with full transparency.",
+  },
+  {
+    id: "04",
+    title: "Activate Trip.",
+    desc: "Launch everything with one click.",
+  },
+  {
+    id: "05",
+    title: "Stay in Control.",
+    desc: "Track, manage, and update anytime.",
   },
 ];
 
@@ -38,8 +48,8 @@ export default function RewiredSection() {
               viewport={{ once: true }}
               className="text-4xl md:text-6xl font-semibold leading-tight"
             >
-              <div>Real Estate,</div>
-              <div className="text-gray-400">Rewired.</div>
+              <div>Flight Operations,</div>
+              <div className="text-[#213e76]">Reimagined.</div>
             </motion.h2>
 
             {/* BUTTON */}
@@ -48,10 +58,10 @@ export default function RewiredSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
               viewport={{ once: true }}
-              className="mt-8 flex items-center gap-3 px-6 py-3 bg-black text-white rounded-full group"
+              className="mt-8 flex items-center gap-3 px-6 py-3 bg-[#213e76] text-white rounded-full group"
             >
               <span className="text-sm font-medium">
-                Start Your Search
+                Create Your Trip
               </span>
               <ArrowRight
                 size={18}
@@ -62,9 +72,9 @@ export default function RewiredSection() {
 
           {/* RIGHT SIDE */}
           <div>
-            <p className="text-sm text-gray-500 mb-6">Steps:</p>
+            <p className="text-sm text-gray-500 mb-6">Process:</p>
 
-            <div className="space-y-8">
+            <div className="space-y-2">
 
               {steps.map((step, i) => (
                 <motion.div
@@ -76,7 +86,7 @@ export default function RewiredSection() {
                     delay: i * 0.2, // 👈 stagger
                   }}
                   viewport={{ once: true }}
-                  className="border-t pt-6 first:border-t-0"
+                  className="border-t pt-3 border-gray-300 first:border-t-0"
                 >
                   <div className="flex gap-6">
 
