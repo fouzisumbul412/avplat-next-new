@@ -2,9 +2,10 @@
 
 import { motion, type Variants } from "framer-motion";
 import {
-  CalendarRange,
-  PlaneTakeoff,
-  Network,
+  Plane,
+  SearchCheck,
+  BadgeCheck,
+  Globe2,
   BellRing,
   RefreshCcw,
   CreditCard,
@@ -19,107 +20,124 @@ import ScrollRevealText from "@/components/operators/ScrollRevealText";
 
 const features: OperatorFeature[] = [
   {
-    id: "itinerary",
-    eyebrow: "Plan Faster",
-    title: "Create Itinerary and Trip Estimates. Instantly!",
+    id: "intro",
+    eyebrow: "AvPlat Trips",
+    title:
+      "Introducing AvPlat Trips: The World’s First Integrated Aircraft Charter Marketplace.",
     description:
-      "30 seconds is all it takes to create a schedule, select services and generate a trip estimate. Share the itinerary with your team instantly. Activate the trip when you are ready.",
+      "Search aircraft, compare options, book instantly, and take off with ease. It can’t get any simpler!",
     points: [
-      "Create schedules in seconds",
-      "Select services instantly",
-      "Generate trip estimates quickly",
+      "Search aircraft easily",
+      "Compare curated options",
+      "Book instantly with confidence",
     ],
     videoId: "IlbOpSccI_E",
-    icon: CalendarRange,
+    icon: Plane,
     accent: "blue",
     layout: "leftText",
   },
   {
-    id: "activation",
-    eyebrow: "One-Touch Ops",
-    title: "Activate your trip. At the touch of a button!",
+    id: "quotes",
+    eyebrow: "Instant Quotes",
+    title: "Create Itinerary and Get Instant Quotes!",
     description:
-      "One touch is all it takes to activate your trip and get all you need – from fuel to catering, from handling to transport, from permits to flight planning. Sit back and relax as your trip progresses from start to finish.",
+      "30 seconds is all it takes to enter your schedule, explore curated fleet and get instant charter estimates. Compare options, select the right aircraft and book when you’re ready.",
     points: [
-      "Activate the trip instantly",
-      "Coordinate fuel, catering and handling",
-      "Track progress from start to finish",
+      "Enter your schedule in seconds",
+      "Explore a curated fleet",
+      "Get instant charter estimates",
     ],
-    videoId: "dQw4w9WgXcQ",
-    icon: PlaneTakeoff,
+    videoId: "yrQKUfTskIE",
+    icon: SearchCheck,
     accent: "slate",
     layout: "rightText",
   },
   {
-    id: "vendors",
-    eyebrow: "Better Cost Control",
-    title: "Extensive Vendor Network. No Cascading Costs!",
+    id: "activate",
+    eyebrow: "Trip Activation",
+    title: "Confirm and Activate Your Trip. Instantly!",
     description:
-      "Our marketplace approach enables you to select vendors of your choice, with price discovery and quality discovery. Setup your preferred vendors. Execute the trip yourself, eliminating multiple layers of intermediaries, while drastically lowering your costs.",
+      "Once you’ve selected your aircraft, simply make the payment to confirm your booking. With one click, your trip is activated and everything is set in motion. Sit back and relax as your journey is seamlessly managed from start to finish.",
     points: [
-      "Choose preferred vendors",
-      "Compare price and quality",
-      "Reduce intermediary layers",
+      "Confirm booking with payment",
+      "Activate the trip with one click",
+      "End-to-end journey coordination",
     ],
-    videoId: "dQw4w9WgXcQ",
-    icon: Network,
+    videoId: "IlbOpSccI_E",
+    icon: BadgeCheck,
     accent: "blue",
+    layout: "centerSplit",
+  },
+  {
+    id: "fleet",
+    eyebrow: "World-Class Fleet",
+    title: "Direct Access to a World-Class Fleet.",
+    description:
+      "Explore a diverse fleet and select the perfect aircraft for your mission. With direct access to operators, avoid layers of intermediaries, reduce brokerage costs and enjoy complete pricing transparency.",
+    points: [
+      "Explore a diverse fleet",
+      "Direct access to operators",
+      "Transparent pricing with lower brokerage costs",
+    ],
+    videoId: "yrQKUfTskIE",
+    icon: Globe2,
+    accent: "slate",
     layout: "leftText",
   },
   {
-    id: "alerts",
-    eyebrow: "Stay Updated",
-    title: "Activities. Notifications. Keeps you alert!",
+    id: "updates",
+    eyebrow: "Live Updates",
+    title: "Stay Updated. Every Step of the Way!",
     description:
-      "An automated tasking and alerting system, as well as a chat system, all perfectly timed keeps you abreast and on top of your trip always.",
+      "Get real-time updates, alerts and notifications throughout your journey. Trip updates and seamless communication ensure you stay on top of every detail from start to finish.",
     points: [
-      "Automated tasking and alerts",
-      "Built-in chat system",
-      "Perfectly timed trip updates",
+      "Real-time alerts and notifications",
+      "Stay informed throughout the trip",
+      "Seamless communication end to end",
     ],
-    videoId: "dQw4w9WgXcQ",
+    videoId: "IlbOpSccI_E",
     icon: BellRing,
-    accent: "slate",
+    accent: "blue",
     layout: "rightText",
   },
   {
     id: "changes",
-    eyebrow: "Flexible Changes",
-    title: "Change Itinerary, Passengers. As much as you want!",
+    eyebrow: "Flexible Planning",
+    title: "Change Plans. Effortlessly!",
     description:
-      "Change dates. Change times. Change destination. Change passengers. Change as much as you want without any hassles. The platform notifies all stakeholders automatically and keeps everything coordinated.",
+      "Modify your itinerary, passengers or schedule anytime. The platform automatically updates and informs everyone involved, keeping your trip smooth and stress-free.",
     points: [
-      "Update dates, times and destinations",
-      "Edit passengers easily",
-      "Notify all stakeholders automatically",
+      "Change itinerary anytime",
+      "Update passengers and schedule easily",
+      "Automatic coordination for everyone involved",
     ],
-    videoId: "dQw4w9WgXcQ",
+    videoId: "yrQKUfTskIE",
     icon: RefreshCcw,
-    accent: "blue",
-    layout: "leftText",
+    accent: "slate",
+    layout: "centerSplit",
   },
   {
-    id: "billing",
-    eyebrow: "Billing Simplified",
-    title: "Pay your bills. Hassle Free!",
+    id: "payments",
+    eyebrow: "Flexible Payments",
+    title: "Flexible Payments. Seamless Experience.",
     description:
-      "Invoices are auto-generated and charged on your wallet. View and retrieve your invoices by trip, by date or by service category. Eliminate accounts payables hassles.",
+      "Pay using credit cards and a range of convenient options. Fast, secure and designed to fit your preferences—every time.",
     points: [
-      "Auto-generated invoices",
-      "Wallet-based charging",
-      "Retrieve invoices by trip, date or service category",
+      "Credit card support",
+      "Convenient payment options",
+      "Fast and secure checkout experience",
     ],
-    videoId: "dQw4w9WgXcQ",
+    videoId: "IlbOpSccI_E",
     icon: CreditCard,
-    accent: "slate",
-    layout: "rightText",
+    accent: "blue",
+    layout: "leftText",
   },
 ];
 
 const heroStats = [
-  { label: "30 Seconds", value: "Trip schedule & estimate" },
-  { label: "One Touch", value: "Trip activation workflow" },
-  { label: "Lower Costs", value: "Marketplace-led execution" },
+  { label: "30 Seconds", value: "Create itinerary & get quotes" },
+  { label: "Instant Booking", value: "Confirm and activate fast" },
+  { label: "Direct Access", value: "Transparent fleet pricing" },
 ];
 
 const staggerContainer: Variants = {
@@ -146,12 +164,12 @@ const staggerItem: Variants = {
   },
 };
 
-export default function OperatorsPage() {
+export default function CharterPage() {
   return (
     <main className="overflow-hidden bg-white text-slate-900 dark:bg-white dark:text-slate-900">
       <PageHero
-        title="Operators"
-        image="/images/Manage.png"
+        title="Charter"
+        image="/images/GetPaid.png"
         overlayOpacity={0.4}
       />
 
@@ -173,23 +191,23 @@ export default function OperatorsPage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
                 <Sparkles className="h-4 w-4" />
-                Operator Platform
+                Charter Marketplace
               </div>
 
               <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight md:text-5xl">
-                A smarter way to plan, activate and manage every trip.
+                Search, compare, book and fly — all in one seamless charter experience.
               </h2>
 
               <div className="mt-5 max-w-3xl">
                 <ScrollRevealText
-                  text="This page is designed to feel cleaner, tighter and more premium — with stronger video focus, lighter surfaces, less clutter and more depth without filling the screen with repetitive cards."
+                  text="AvPlat Trips is designed to make charter booking simpler, faster and more transparent — from itinerary creation and instant quotes to real-time updates, flexible changes and secure payments."
                   className="text-base leading-7 text-slate-600 md:text-lg"
                 />
               </div>
 
               {/* <div className="mt-7 flex flex-wrap gap-3">
                 <a
-                  href="#operator-sections"
+                  href="#charter-sections"
                   className="inline-flex items-center gap-2 rounded-full bg-[#213e76] px-5 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:scale-[1.02]"
                 >
                   Explore Features
@@ -234,7 +252,7 @@ export default function OperatorsPage() {
       </section>
 
       <section
-        id="operator-sections"
+        id="charter-sections"
         className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24"
       >
         <div className="space-y-8 md:space-y-10">
@@ -260,11 +278,10 @@ export default function OperatorsPage() {
                 Final CTA
               </p>
               <h3 className="mt-3 text-2xl font-semibold leading-tight md:text-4xl">
-                Bright, modern and video-led — without the extra clutter.
+                A cleaner charter journey with instant quotes, direct fleet access and seamless trip control.
               </h3>
               <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-                Replace the placeholder video IDs with your real YouTube videos and
-                this page will feel much more focused and premium.
+                Replace each section video ID with the correct charter video and this page is ready.
               </p>
             </div>
 

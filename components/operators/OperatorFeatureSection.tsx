@@ -8,7 +8,7 @@ import {
   type Variants,
 } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
-import { CheckCircle2, PlayCircle } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import ScrollRevealText from "./ScrollRevealText";
 
 export type OperatorFeature = {
@@ -79,12 +79,10 @@ function VideoBlock({
         style={{ transformStyle: "preserve-3d" }}
         className="relative"
       >
-        <div className={`absolute -left-4 top-8 h-24 w-24 rounded-full blur-3xl ${accentGlow}`} />
+        <div
+          className={`absolute -left-4 top-8 h-24 w-24 rounded-full blur-3xl ${accentGlow}`}
+        />
         <div className="absolute -right-4 bottom-8 h-28 w-28 rounded-full bg-sky-100 blur-3xl" />
-
-        {/* <div className="absolute left-4 top-4 z-10 rounded-full border border-white/80 bg-white/90 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#213e76] shadow-[0_8px_20px_rgba(18,38,63,0.08)]">
-          Watch the workflow
-        </div> */}
 
         <div className="rounded-[28px] border border-slate-200/80 bg-white p-3 shadow-[0_20px_50px_rgba(18,38,63,0.08)]">
           <div className="mb-3 flex items-center justify-between rounded-[18px] border border-slate-200/80 bg-[#f7faff] px-4 py-3">
@@ -93,11 +91,6 @@ function VideoBlock({
               <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
               <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
             </div>
-
-            {/* <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              <PlayCircle className="h-4 w-4 text-[#213e76]" />
-              Feature Video
-            </div> */}
           </div>
 
           <div className="overflow-hidden rounded-[22px] border border-slate-200 bg-white">
@@ -199,17 +192,17 @@ export default function OperatorFeatureSection({
   if (centerSplit) {
     return (
       <section ref={ref} id={feature.id} className="py-2">
-        <div className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:gap-6">
-          <motion.div style={{ y: textY }}>
-            <TextBlock feature={feature} index={index} />
-          </motion.div>
-
-          <motion.div style={{ y: videoY }}>
+        <div className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-6">
+          <motion.div style={{ y: videoY }} className="order-1 lg:order-2">
             <VideoBlock
               title={feature.title}
               videoId={feature.videoId}
               accent={feature.accent}
             />
+          </motion.div>
+
+          <motion.div style={{ y: textY }} className="order-2 lg:order-1">
+            <TextBlock feature={feature} index={index} />
           </motion.div>
         </div>
       </section>
@@ -218,32 +211,34 @@ export default function OperatorFeatureSection({
 
   return (
     <section ref={ref} id={feature.id} className="py-2">
-      <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-center lg:gap-6">
         {leftText && (
           <>
-            <motion.div style={{ y: textY }}>
-              <TextBlock feature={feature} index={index} />
-            </motion.div>
-            <motion.div style={{ y: videoY }}>
+            <motion.div style={{ y: videoY }} className="order-1 lg:order-2">
               <VideoBlock
                 title={feature.title}
                 videoId={feature.videoId}
                 accent={feature.accent}
               />
+            </motion.div>
+
+            <motion.div style={{ y: textY }} className="order-2 lg:order-1">
+              <TextBlock feature={feature} index={index} />
             </motion.div>
           </>
         )}
 
         {rightText && (
           <>
-            <motion.div style={{ y: videoY }} className="lg:order-1">
+            <motion.div style={{ y: videoY }} className="order-1 lg:order-1">
               <VideoBlock
                 title={feature.title}
                 videoId={feature.videoId}
                 accent={feature.accent}
               />
             </motion.div>
-            <motion.div style={{ y: textY }} className="lg:order-2">
+
+            <motion.div style={{ y: textY }} className="order-2 lg:order-2">
               <TextBlock feature={feature} index={index} />
             </motion.div>
           </>

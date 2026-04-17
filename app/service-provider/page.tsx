@@ -2,12 +2,12 @@
 
 import { motion, type Variants } from "framer-motion";
 import {
-  CalendarRange,
-  PlaneTakeoff,
-  Network,
+  FileText,
+  Handshake,
   BellRing,
   RefreshCcw,
-  CreditCard,
+  Wallet,
+  Receipt,
   Sparkles,
   ArrowRight,
 } from "lucide-react";
@@ -19,107 +19,107 @@ import ScrollRevealText from "@/components/operators/ScrollRevealText";
 
 const features: OperatorFeature[] = [
   {
-    id: "itinerary",
-    eyebrow: "Plan Faster",
-    title: "Create Itinerary and Trip Estimates. Instantly!",
+    id: "estimates",
+    eyebrow: "Automated Estimates",
+    title: "Stop sending fruitless estimates. Increase Productivity!",
     description:
-      "30 seconds is all it takes to create a schedule, select services and generate a trip estimate. Share the itinerary with your team instantly. Activate the trip when you are ready.",
+      "Tired of sending multiple estimates, to multiple customers every day that don’t result in business? Register your services on the platform. Set up your service rate cards one-time and let us do the rest. Estimates will be automatically generated based on your settings.",
     points: [
-      "Create schedules in seconds",
-      "Select services instantly",
-      "Generate trip estimates quickly",
+      "Set service rate cards once",
+      "Generate estimates automatically",
+      "Reduce repetitive manual quoting",
     ],
-    videoId: "IlbOpSccI_E",
-    icon: CalendarRange,
+    videoId: "https://youtu.be/VIDEO_ID_1",
+    icon: FileText,
     accent: "blue",
     layout: "leftText",
   },
   {
-    id: "activation",
-    eyebrow: "One-Touch Ops",
-    title: "Activate your trip. At the touch of a button!",
+    id: "requests",
+    eyebrow: "Quick Acceptance",
+    title: "Accept service requests. At the touch of a button!",
     description:
-      "One touch is all it takes to activate your trip and get all you need – from fuel to catering, from handling to transport, from permits to flight planning. Sit back and relax as your trip progresses from start to finish.",
+      "One touch is all it takes to accept the service request from your customer – from fuel to catering, from handling to transport, from permits to flight planning. View your service requests by date, tail no, customer or service category.",
     points: [
-      "Activate the trip instantly",
-      "Coordinate fuel, catering and handling",
-      "Track progress from start to finish",
+      "Accept service requests instantly",
+      "View requests by date, tail no or customer",
+      "Manage by service category with ease",
     ],
-    videoId: "dQw4w9WgXcQ",
-    icon: PlaneTakeoff,
+    videoId: "https://youtu.be/VIDEO_ID_2",
+    icon: Handshake,
     accent: "slate",
     layout: "rightText",
   },
   {
-    id: "vendors",
-    eyebrow: "Better Cost Control",
-    title: "Extensive Vendor Network. No Cascading Costs!",
-    description:
-      "Our marketplace approach enables you to select vendors of your choice, with price discovery and quality discovery. Setup your preferred vendors. Execute the trip yourself, eliminating multiple layers of intermediaries, while drastically lowering your costs.",
-    points: [
-      "Choose preferred vendors",
-      "Compare price and quality",
-      "Reduce intermediary layers",
-    ],
-    videoId: "dQw4w9WgXcQ",
-    icon: Network,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "alerts",
-    eyebrow: "Stay Updated",
-    title: "Activities. Notifications. Keeps you alert!",
+    id: "notifications",
+    eyebrow: "Live Updates",
+    title: "Activities and Notifications. Keeps you alert!",
     description:
       "An automated tasking and alerting system, as well as a chat system, all perfectly timed keeps you abreast and on top of your trip always.",
     points: [
-      "Automated tasking and alerts",
-      "Built-in chat system",
-      "Perfectly timed trip updates",
+      "Automated tasking and notifications",
+      "Real-time communication through chat",
+      "Stay updated on every service movement",
     ],
-    videoId: "dQw4w9WgXcQ",
+    videoId: "https://youtu.be/VIDEO_ID_3",
     icon: BellRing,
+    accent: "blue",
+    layout: "leftText",
+  },
+  {
+    id: "changes",
+    eyebrow: "Smooth Revisions",
+    title: "Multiple Changes and Revisions. Hassle Free!",
+    description:
+      "Change in dates. Change in times. Change in destination. Change in passengers. Are you being bombarded with calls and emails? Our platform eliminates these problems, automatically keeps everything coordinated and provides timely alerts on what needs to be done.",
+    points: [
+      "Handle multiple changes without chaos",
+      "Automatic coordination across updates",
+      "Timely alerts for required actions",
+    ],
+    videoId: "https://youtu.be/VIDEO_ID_4",
+    icon: RefreshCcw,
     accent: "slate",
     layout: "rightText",
   },
   {
-    id: "changes",
-    eyebrow: "Flexible Changes",
-    title: "Change Itinerary, Passengers. As much as you want!",
+    id: "payments",
+    eyebrow: "Cashflow Support",
+    title: "Get paid. On Time!",
     description:
-      "Change dates. Change times. Change destination. Change passengers. Change as much as you want without any hassles. The platform notifies all stakeholders automatically and keeps everything coordinated.",
+      "Prompt bi-weekly settlements increase your cashflow. Eliminate Accounts Receivables hassles.",
     points: [
-      "Update dates, times and destinations",
-      "Edit passengers easily",
-      "Notify all stakeholders automatically",
+      "Prompt bi-weekly settlements",
+      "Improve cashflow visibility",
+      "Reduce receivables follow-up effort",
     ],
-    videoId: "dQw4w9WgXcQ",
-    icon: RefreshCcw,
+    videoId: "https://youtu.be/VIDEO_ID_5",
+    icon: Wallet,
     accent: "blue",
     layout: "leftText",
   },
   {
     id: "billing",
     eyebrow: "Billing Simplified",
-    title: "Pay your bills. Hassle Free!",
+    title: "Raise your bills. Hassle Free!",
     description:
-      "Invoices are auto-generated and charged on your wallet. View and retrieve your invoices by trip, by date or by service category. Eliminate accounts payables hassles.",
+      "Invoices are auto-generated and customer wallets auto-deducted. View and retrieve your invoices by trip, by date or by service category. Eliminate Accounts Receivable hassles.",
     points: [
       "Auto-generated invoices",
-      "Wallet-based charging",
-      "Retrieve invoices by trip, date or service category",
+      "Customer wallet auto-deduction",
+      "Retrieve invoices by trip, date or category",
     ],
-    videoId: "dQw4w9WgXcQ",
-    icon: CreditCard,
+    videoId: "https://youtu.be/VIDEO_ID_6",
+    icon: Receipt,
     accent: "slate",
     layout: "rightText",
   },
 ];
 
 const heroStats = [
-  { label: "30 Seconds", value: "Trip schedule & estimate" },
-  { label: "One Touch", value: "Trip activation workflow" },
-  { label: "Lower Costs", value: "Marketplace-led execution" },
+  { label: "One-Time Setup", value: "Configure rate cards once" },
+  { label: "One Touch", value: "Accept service requests instantly" },
+  { label: "On Time", value: "Bi-weekly settlements & easy billing" },
 ];
 
 const staggerContainer: Variants = {
@@ -146,12 +146,12 @@ const staggerItem: Variants = {
   },
 };
 
-export default function OperatorsPage() {
+export default function ServiceProvidersPage() {
   return (
     <main className="overflow-hidden bg-white text-slate-900 dark:bg-white dark:text-slate-900">
       <PageHero
-        title="Operators"
-        image="/images/Manage.png"
+        title="Service Providers"
+        image="/images/Accept.png"
         overlayOpacity={0.4}
       />
 
@@ -173,23 +173,23 @@ export default function OperatorsPage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
                 <Sparkles className="h-4 w-4" />
-                Operator Platform
+                Service Provider Platform
               </div>
 
               <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight md:text-5xl">
-                A smarter way to plan, activate and manage every trip.
+                A smarter way for service providers to quote, accept, coordinate and get paid.
               </h2>
 
               <div className="mt-5 max-w-3xl">
                 <ScrollRevealText
-                  text="This page is designed to feel cleaner, tighter and more premium — with stronger video focus, lighter surfaces, less clutter and more depth without filling the screen with repetitive cards."
+                  text="This page follows the same cleaner, tighter and more premium experience as the operators page — with separate videos for each service provider workflow, brighter surfaces and less clutter."
                   className="text-base leading-7 text-slate-600 md:text-lg"
                 />
               </div>
 
               {/* <div className="mt-7 flex flex-wrap gap-3">
                 <a
-                  href="#operator-sections"
+                  href="#service-provider-sections"
                   className="inline-flex items-center gap-2 rounded-full bg-[#213e76] px-5 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:scale-[1.02]"
                 >
                   Explore Features
@@ -234,7 +234,7 @@ export default function OperatorsPage() {
       </section>
 
       <section
-        id="operator-sections"
+        id="service-provider-sections"
         className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24"
       >
         <div className="space-y-8 md:space-y-10">
@@ -260,11 +260,10 @@ export default function OperatorsPage() {
                 Final CTA
               </p>
               <h3 className="mt-3 text-2xl font-semibold leading-tight md:text-4xl">
-                Bright, modern and video-led — without the extra clutter.
+                Separate videos for each service provider journey make the page clearer and stronger.
               </h3>
               <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-                Replace the placeholder video IDs with your real YouTube videos and
-                this page will feel much more focused and premium.
+                Just replace each <code>videoUrl</code> with the correct YouTube link for that section.
               </p>
             </div>
 

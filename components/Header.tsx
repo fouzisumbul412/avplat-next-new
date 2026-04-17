@@ -19,7 +19,8 @@ export default function Header() {
   }, []);
 
   const navItems = [
-    { name: "Air Charters", href: "/" },
+    { name: "Home", href: "/" },
+    { name: "Air Charters", href: "/charters" },
     { name: "Operators", href: "/operators" },
     { name: "Service Provider", href: "/service-provider" },
   ];
