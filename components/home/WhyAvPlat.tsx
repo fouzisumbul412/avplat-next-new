@@ -3,44 +3,51 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Apple, Play } from "lucide-react";
+import AnimatedHeading from "../AnimatedHeading";
+
+const text = `Introducing AvPlat Charters: The World's First Integrated Flight Planning and Trip Support Software. Create schedule, select services and fly. It can’t get any simpler!`;
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.avplat.aviation&pcampaignid=web_share.aviation&pcampaignid=web_share";
+
 const APP_STORE_URL =
   "https://apps.apple.com/us/app/avplat/id1369917026";
 
 export default function WhyAvPlat() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const text = `Introducing AvPlat Trips: The World's First Integrated Flight Planning and Trip Support Software. Create schedule, select services and fly. It can’t get any simpler!`;
-
-  const words = text.split(" ");
-
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 0.9", "end 0.1"],
+    offset: ["start 80%", "end 20%"],
   });
+
+  const words = text.split(" ");
 
   return (
     <section
       ref={containerRef}
-      className="bg-white flex items-center px-6 md:px-0 sm:px-5"
-      style={{ height: "60vh" }} // slightly increased for buttons
+      className="w-full py-16 px-4 md:px-10 bg-white"
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto h-full items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        
+        {/* LEFT CONTENT */}
+        <motion.div
+          initial={{ opacity: 0, x: -60 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >
+          {/* Heading */}
+          
+           <AnimatedHeading
+  titleBlack="Why"
+  titleBlue="AvPlat"
+  align="left"
+   size="text-[24px] md:text-[38px] lg:text-[45px]"
+/>
 
-        {/* LEFT */}
-        <div className="md:col-span-1">
-          <h2 className="text-4xl text-[#213e76] tracking-wide font-semibold">
-            Why AvPlat
-          </h2>
-        </div>
-
-        {/* RIGHT */}
-        <div className="md:col-span-2 flex flex-col justify-center">
-
-          {/* TEXT */}
-          <h4 className="text-xl md:text-3xl font-normal leading-tight flex flex-wrap">
+          {/* Scroll Reveal Text */}
+          <p className="text-base md:text-xl leading-relaxed flex flex-wrap pt-7">
             {words.map((word, i) => {
               const start = i / words.length;
               const end = start + 1 / words.length;
@@ -61,11 +68,11 @@ export default function WhyAvPlat() {
                 </motion.span>
               );
             })}
-          </h4>
+          </p>
 
-          {/* BUTTONS */}
-          <div className="flex flex-wrap gap-4 mt-6">
-
+          {/* Buttons */}
+          <div className="flex flex-wrap gap-4 mt-8">
+            
             {/* App Store */}
             <a
               href={APP_STORE_URL}
@@ -87,10 +94,30 @@ export default function WhyAvPlat() {
               <Play size={18} />
               <span className="text-sm font-medium">Play Store</span>
             </a>
-
           </div>
+        </motion.div>
 
-        </div>
+        {/* RIGHT VIDEO */}
+        <motion.div
+          initial={{ opacity: 0, x: 60 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="w-full"
+        >
+          <div className="relative w-full h-[500px] md:h-[550px] overflow-hidden shadow-lg">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            >
+              <source src="/videos/hero-mob.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );

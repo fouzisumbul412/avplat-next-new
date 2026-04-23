@@ -3,9 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plane } from "lucide-react";
+import { X, Plane, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { Loader2 } from "lucide-react";
 
 type BookCharterSheetProps = {
   isOpen: boolean;
@@ -91,13 +90,6 @@ const BookCharterSheet = ({
     html.style.overflow = "hidden";
     html.style.overscrollBehavior = "none";
     html.style.height = "100%";
-
-    body.style.position = "fixed";
-    body.style.top = `-${scrollY}px`;
-    body.style.left = "0";
-    body.style.right = "0";
-    body.style.width = "100%";
-    body.style.height = "100%";
     body.style.overflow = "hidden";
 
     if (scrollbarGap > 0) {
@@ -191,44 +183,42 @@ const BookCharterSheet = ({
     handleFieldChange("phone", sanitizedValue);
   };
 
- const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  setHasSubmitted(true);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setHasSubmitted(true);
 
-  const errors = validateForm(formValues, isReturnFlight);
-  setFormErrors(errors);
+    const errors = validateForm(formValues, isReturnFlight);
+    setFormErrors(errors);
 
-  if (Object.keys(errors).length > 0) return;
+    if (Object.keys(errors).length > 0) return;
 
-  setSubmitting(true);
+    setSubmitting(true);
 
-  try {
-    await fetch(
-      "https://script.google.com/macros/s/AKfycbz7owVzSx_BwRm2MSTn6TYEcrOsev3BaAfutx7yKovCJWq6sAxabn-j8gLVvDwk7ccx/exec",
-      {
-        method: "POST",
-        mode: "no-cors", // 🔥 IMPORTANT
-        body: JSON.stringify({
-          ...formValues,
-          formType: "Book Charter",
-          timestamp: new Date().toISOString(),
-        }),
-      }
-    );
+    try {
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbz7owVzSx_BwRm2MSTn6TYEcrOsev3BaAfutx7yKovCJWq6sAxabn-j8gLVvDwk7ccx/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify({
+            ...formValues,
+            formType: "Book Charter",
+            timestamp: new Date().toISOString(),
+          }),
+        }
+      );
 
-    // toast.success("Charter request submitted ✈️");
-setShowSuccessModal(true);
-onClose();
-    setFormValues(initialValues);
-    setHasSubmitted(false);
+      setShowSuccessModal(true);
+      onClose();
+      setFormValues(initialValues);
+      setHasSubmitted(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Submission failed ❌");
+    }
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Submission failed ❌");
-  }
-
-  setSubmitting(false);
-};
+    setSubmitting(false);
+  };
 
   if (!mounted) return null;
 
@@ -238,7 +228,7 @@ onClose();
         {isOpen && (
           <>
             <motion.div
-              className="fixed inset-0 z-[9998] bg-black/40"
+              className="fixed inset-0 z-[9998] bg-transparent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -252,7 +242,7 @@ onClose();
               transition={{ duration: 0.45, ease: "easeInOut" }}
               className="fixed inset-x-0 bottom-0 z-[9999] flex items-end justify-center"
             >
-              <div className="relative w-full max-w-7xl rounded-t-[26px] bg-[#EDEDED] shadow-xl">
+              <div className="relative w-full max-w-7xl rounded-t-[26px] bg-white shadow-xl">
                 <button
                   onClick={onClose}
                   className="absolute -top-5 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow md:right-6"
@@ -479,48 +469,48 @@ onClose();
                       ) : (
                         <div className="flex items-end justify-end xl:justify-start">
                           <button
-  type="submit"
-  disabled={!isSubmitEnabled || submitting}
-  className={`flex h-10 min-w-[104px] items-center justify-center gap-2 rounded-full px-3 text-white transition md:h-12 md:min-w-[118px] md:px-4 ${
-    isSubmitEnabled && !submitting
-      ? "bg-[#2E2523] hover:scale-105"
-      : "cursor-not-allowed bg-[#2E2523]/40"
-  }`}
->
-  {submitting ? (
-    <Loader2 className="animate-spin" size={16} />
-  ) : (
-    <Plane size={16} />
-  )}
+                            type="submit"
+                            disabled={!isSubmitEnabled || submitting}
+                            className={`flex h-10 min-w-[104px] items-center justify-center gap-2 rounded-full px-3 text-white transition md:h-12 md:min-w-[118px] md:px-4 ${
+                              isSubmitEnabled && !submitting
+                                ? "bg-[#2E2523] hover:scale-105"
+                                : "cursor-not-allowed bg-[#2E2523]/40"
+                            }`}
+                          >
+                            {submitting ? (
+                              <Loader2 className="animate-spin" size={16} />
+                            ) : (
+                              <Plane size={16} />
+                            )}
 
-  <span className="text-xs md:text-sm">
-    {submitting ? "Submitting..." : "Submit"}
-  </span>
-</button>
+                            <span className="text-xs md:text-sm">
+                              {submitting ? "Submitting..." : "Submit"}
+                            </span>
+                          </button>
                         </div>
                       )}
 
                       {isReturnFlight && (
                         <div className="flex items-end justify-end xl:justify-start">
                           <button
-  type="submit"
-  disabled={!isSubmitEnabled || submitting}
-  className={`flex h-10 min-w-[104px] items-center justify-center gap-2 rounded-full px-3 text-white transition md:h-12 md:min-w-[118px] md:px-4 ${
-    isSubmitEnabled && !submitting
-      ? "bg-[#2E2523] hover:scale-105"
-      : "cursor-not-allowed bg-[#2E2523]/40"
-  }`}
->
-  {submitting ? (
-    <Loader2 className="animate-spin" size={16} />
-  ) : (
-    <Plane size={16} />
-  )}
+                            type="submit"
+                            disabled={!isSubmitEnabled || submitting}
+                            className={`flex h-10 min-w-[104px] items-center justify-center gap-2 rounded-full px-3 text-white transition md:h-12 md:min-w-[118px] md:px-4 ${
+                              isSubmitEnabled && !submitting
+                                ? "bg-[#2E2523] hover:scale-105"
+                                : "cursor-not-allowed bg-[#2E2523]/40"
+                            }`}
+                          >
+                            {submitting ? (
+                              <Loader2 className="animate-spin" size={16} />
+                            ) : (
+                              <Plane size={16} />
+                            )}
 
-  <span className="text-xs md:text-sm">
-    {submitting ? "Submitting..." : "Submit"}
-  </span>
-</button>
+                            <span className="text-xs md:text-sm">
+                              {submitting ? "Submitting..." : "Submit"}
+                            </span>
+                          </button>
                         </div>
                       )}
                     </div>
@@ -558,58 +548,50 @@ onClose();
           </>
         )}
       </AnimatePresence>
+
       <AnimatePresence>
-  {showSuccessModal && (
-    <>
-      {/* Overlay */}
-      <motion.div
-        className="fixed inset-0 z-[10000] bg-black/50"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      />
-
-      {/* Modal */}
-      <motion.div
-        className="fixed inset-0 z-[10001] flex items-center justify-center px-4"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="relative w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl">
-          
-          {/* Close Button */}
-          <button
+        {showSuccessModal && (
+          <motion.div
+            className="fixed inset-0 z-[10001] flex items-center justify-center px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={() => setShowSuccessModal(false)}
-            className="absolute right-3 top-3 rounded-full p-1 hover:bg-gray-100"
           >
-            <X size={18} />
-          </button>
+            <motion.div
+              className="relative w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute right-3 top-3 rounded-full p-1 hover:bg-gray-100"
+                aria-label="Close success modal"
+              >
+                <X size={18} />
+              </button>
 
-          {/* Content */}
-          <h3 className="text-xl font-semibold mb-2">
-            ✈️ Thank You!
-          </h3>
+              <h3 className="mb-2 text-xl font-semibold">✈️ Thank You!</h3>
 
-          <p className="text-gray-600 text-sm md:text-base">
-            Your charter request has been submitted successfully.
-            <br />
-            We will connect with you soon.
-          </p>
+              <p className="text-sm text-gray-600 md:text-base">
+                Your charter request has been submitted successfully.
+                <br />
+                We will connect with you soon.
+              </p>
 
-          {/* CTA */}
-          <button
-            onClick={() => setShowSuccessModal(false)}
-            className="mt-5 rounded-full bg-[#2E2523] px-5 py-2 text-white hover:scale-105 transition"
-          >
-            Close
-          </button>
-        </div>
-      </motion.div>
-    </>
-  )}
-</AnimatePresence>
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="mt-5 rounded-full bg-[#2E2523] px-5 py-2 text-white transition hover:scale-105"
+              >
+                Close
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <style>{`
         .no-scrollbar::-webkit-scrollbar {
