@@ -15,6 +15,7 @@ const images = [
   "/images/Estimates.png",
   "/images/Activate.png",
   "/images/Control.png",
+  "/images/Earn.png",  
 ];
 
 /**

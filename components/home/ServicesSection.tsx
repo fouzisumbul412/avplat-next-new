@@ -3,40 +3,48 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 const services = [
   {
     id: "01",
-    title: "Earn",
-    desc: "Stop chasing leads that go nowhere. Set your service rates once and let AvPlat automatically generate accurate estimates for the right customers — saving time and increasing conversions.",
+    title: "Auto Estimates",
+    desc: "Tired of sending multiple estimates, to multiple customers every day that don’t result in business? Register your services on the platform. Set up your service rate cards one-time and let us do the rest. Estimates will be automatically generated based on your settings.",
     image:
       "/images/Earn.png",
   },
   {
     id: "02",
-    title: "Accept",
-    desc: "Manage service requests effortlessly.Review, accept, and schedule jobs in one click — from fuel and catering to permits and handling — all in one unified platform.",
+    title: "Accept Requests",
+    desc: "One touch is all it takes to accept the service request from your customer – from fuel to catering, from handling to transport, from permits to flight planning. View your service requests by date, tail no, customer or service category.",
     image:
       "/images/Accept.png",
   },
   {
     id: "03",
-    title: "Manage",
-    desc: "Stay in control with real-time updates.Smart notifications, task tracking, and built-in communication keep every trip organized and every stakeholder aligned.",
+    title: "Smart Alerts",
+    desc: "An automated tasking and alerting system, as well as a chat system, all perfectly timed keeps you abreast and on top of your trip always.",
     image:
       "/images/Manage.png",
   },
   {
     id: "04",
-    title: "Adapt",
-    desc: "Handle changes without the chaos.Update schedules, services, or trip details anytime — the platform automatically syncs everything and keeps everyone informed.",
+    title: "Flexible Changes",
+    desc: "Change in dates. Change in times. Change in destination. Change in passengers. Are you being bombarded with calls and emails? Our platform eliminates these problems, automatically keeps everything coordinated and provides timely alerts on what needs to be done.",
     image:
       "/images/Adapt.png",
   },
   {
     id: "05",
-    title: "Get Paid",
-    desc: "Faster payments, zero follow-ups.Automated invoicing and scheduled settlements ensure predictable cash flow — without the usual back-and-forth.",
+    title: "Quick Payouts",
+    desc: "Prompt bi-weekly settlements increase your cashflow. Eliminate Accounts Receivables hassles.",
+    image:
+      "/images/GetPaid.png",
+  },
+  {
+    id: "06",
+    title: "Smart Billing",
+    desc: "Invoices are auto-generated and customer wallets auto-deducted. View and retrieve your invoices by trip, by date or by service category. Eliminate Accounts Receivable hassles.",
     image:
       "/images/GetPaid.png",
   },
@@ -44,17 +52,17 @@ const services = [
 ];
 
 export default function ServicesSection() {
-  const [active, setActive] = useState<number | null>(null);
+  const [active, setActive] = useState<number | null>(0);
 
   return (
-    <section className="w-full bg-[#151717] text-white py-16 md:py-24">
+    <section className="w-full bg-black text-white py-16 md:py-24">
 
       {/* HEADER */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 mb-16">
         <div className="grid md:grid-cols-3 items-end">
           
           {/* LEFT */}
-          <p className="text-xl text-gray-400">Services</p>
+          <p className="text-xl text-gray-400">Service Providers</p>
 
           {/* CENTER ALIGN WITH TITLES */}
           <div className="md:col-span-2 md:pl-[120px]">
@@ -75,7 +83,7 @@ export default function ServicesSection() {
           <div
             key={i}
             onMouseEnter={() => setActive(i)}
-            onMouseLeave={() => setActive(null)}
+            onMouseLeave={() => setActive(0)}
             className="relative w-full group overflow-hidden"
           >
 
@@ -106,7 +114,7 @@ export default function ServicesSection() {
               initial={{ y: 0 }}
               animate={{ y: active === i ? "-100%" : "0%" }}
               transition={{ duration: 0.6, ease: "easeInOut" }}
-              className="absolute inset-0 bg-[#151717] z-10"
+              className="absolute inset-0 bg-black z-10"
             />
 
             {/* CONTENT */}
@@ -125,7 +133,7 @@ export default function ServicesSection() {
 
               {/* CENTER */}
               <div className="text-center">
-                <h3 className="text-5xl md:text-7xl font-semibold tracking-tight">
+                <h3 className="text-3xl md:text-6xl font-semibold tracking-tight">
                   {item.title}
                 </h3>
 
@@ -159,10 +167,12 @@ export default function ServicesSection() {
             </span>
           </p>
 
+          <Link href="/service-provider">
           <button className="mt-8 flex items-center gap-3 border border-white/30 px-6 py-3 rounded-full hover:bg-white hover:text-black transition">
-            Get Started with AvPlat
+            Join as Provider
             <ArrowRight size={18} />
           </button>
+          </Link>
         </div>
 
       </div>
