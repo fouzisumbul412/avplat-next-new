@@ -10,12 +10,12 @@ import {
 import { useRef } from "react";
 
 const images = [
-  "/images/Plan.png",
-  "/images/Smart.png",
-  "/images/Estimates.png",
-  "/images/Activate.png",
-  "/images/Control.png",
-  "/images/Earn.png",  
+  "/images/a1.jpg",
+  "/images/a2.jpeg",
+  "/images/a3.jpeg",
+  "/images/a4.jpeg",
+  "/images/a5.jpeg",
+  "/images/a6.jpeg",  
 ];
 
 /**
