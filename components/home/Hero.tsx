@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { CSSProperties, useId, useLayoutEffect, useRef, useState } from "react";
+import React, { CSSProperties, useId, useLayoutEffect, useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BookCharterSheet from "../BookCharterSheet";
@@ -118,6 +118,8 @@ export default function Hero() {
   const outlineGlowRef = useRef<SVGTextElement | null>(null);
 
   const [isCharterSheetOpen, setIsCharterSheetOpen] = useState(false);
+  const [hasUserOpened, setHasUserOpened] = useState(false);
+  const [autoTriggered, setAutoTriggered] = useState(false);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -284,6 +286,30 @@ tl.to(
     return () => ctx.revert();
   }, []);
 
+ useEffect(() => {
+  const handleScroll = () => {
+    if (hasUserOpened || isCharterSheetOpen || autoTriggered) return;
+
+    const section = rootRef.current;
+    if (!section) return;
+
+    const rect = section.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+   
+    if (rect.bottom <= windowHeight * 1.1) {
+      setAutoTriggered(true); 
+      setIsCharterSheetOpen(true);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [hasUserOpened, isCharterSheetOpen, autoTriggered]);
+
   return (
     <>
       <section ref={rootRef} className="hero-root">
@@ -374,7 +400,10 @@ tl.to(
               <button
                 type="button"
                 className="hero-button bg-[#213e76]"
-                onClick={() => setIsCharterSheetOpen(true)}
+                 onClick={() => {
+  setIsCharterSheetOpen(true);
+  setHasUserOpened(true);
+}}
               >
                 <span>Book a Charter</span>
 

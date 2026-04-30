@@ -61,62 +61,62 @@ const BookCharterSheet = ({
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!isOpen || !mounted) return;
+  // useEffect(() => {
+  //   if (!isOpen || !mounted) return;
 
-    const scrollY = window.scrollY;
-    const body = document.body;
-    const html = document.documentElement;
+  //   const scrollY = window.scrollY;
+  //   const body = document.body;
+  //   const html = document.documentElement;
 
-    const previousBodyPosition = body.style.position;
-    const previousBodyTop = body.style.top;
-    const previousBodyLeft = body.style.left;
-    const previousBodyRight = body.style.right;
-    const previousBodyWidth = body.style.width;
-    const previousBodyOverflow = body.style.overflow;
-    const previousBodyHeight = body.style.height;
-    const previousBodyPaddingRight = body.style.paddingRight;
+  //   const previousBodyPosition = body.style.position;
+  //   const previousBodyTop = body.style.top;
+  //   const previousBodyLeft = body.style.left;
+  //   const previousBodyRight = body.style.right;
+  //   const previousBodyWidth = body.style.width;
+  //   const previousBodyOverflow = body.style.overflow;
+  //   const previousBodyHeight = body.style.height;
+  //   const previousBodyPaddingRight = body.style.paddingRight;
 
-    const previousHtmlOverflow = html.style.overflow;
-    const previousHtmlOverscrollBehavior = html.style.overscrollBehavior;
-    const previousHtmlHeight = html.style.height;
+  //   const previousHtmlOverflow = html.style.overflow;
+  //   const previousHtmlOverscrollBehavior = html.style.overscrollBehavior;
+  //   const previousHtmlHeight = html.style.height;
 
-    const scrollbarGap = window.innerWidth - html.clientWidth;
+  //   const scrollbarGap = window.innerWidth - html.clientWidth;
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
+  //   const handleKeyDown = (event: KeyboardEvent) => {
+  //     if (event.key === "Escape") onClose();
+  //   };
 
-    html.style.overflow = "hidden";
-    html.style.overscrollBehavior = "none";
-    html.style.height = "100%";
-    body.style.overflow = "hidden";
+  //   html.style.overflow = "hidden";
+  //   html.style.overscrollBehavior = "none";
+  //   html.style.height = "100%";
+  //   body.style.overflow = "hidden";
 
-    if (scrollbarGap > 0) {
-      body.style.paddingRight = `${scrollbarGap}px`;
-    }
+  //   if (scrollbarGap > 0) {
+  //     body.style.paddingRight = `${scrollbarGap}px`;
+  //   }
 
-    window.addEventListener("keydown", handleKeyDown);
+  //   window.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown);
 
-      html.style.overflow = previousHtmlOverflow;
-      html.style.overscrollBehavior = previousHtmlOverscrollBehavior;
-      html.style.height = previousHtmlHeight;
+  //     html.style.overflow = previousHtmlOverflow;
+  //     html.style.overscrollBehavior = previousHtmlOverscrollBehavior;
+  //     html.style.height = previousHtmlHeight;
 
-      body.style.position = previousBodyPosition;
-      body.style.top = previousBodyTop;
-      body.style.left = previousBodyLeft;
-      body.style.right = previousBodyRight;
-      body.style.width = previousBodyWidth;
-      body.style.height = previousBodyHeight;
-      body.style.overflow = previousBodyOverflow;
-      body.style.paddingRight = previousBodyPaddingRight;
+  //     body.style.position = previousBodyPosition;
+  //     body.style.top = previousBodyTop;
+  //     body.style.left = previousBodyLeft;
+  //     body.style.right = previousBodyRight;
+  //     body.style.width = previousBodyWidth;
+  //     body.style.height = previousBodyHeight;
+  //     body.style.overflow = previousBodyOverflow;
+  //     body.style.paddingRight = previousBodyPaddingRight;
 
-      window.scrollTo(0, scrollY);
-    };
-  }, [isOpen, mounted, onClose]);
+  //     window.scrollTo(0, scrollY);
+  //   };
+  // }, [isOpen, mounted, onClose]);
 
   useEffect(() => {
     if (!isReturnFlight) {
