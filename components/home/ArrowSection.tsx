@@ -18,9 +18,6 @@ const images = [
   "/images/a6.jpeg",  
 ];
 
-/**
- * Change this to "right" if you want normal direction again.
- */
 const ARROW_DIRECTION: "left" | "right" = "left";
 
 const arrowMask = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 346 440'%3E%3Cpath fill='black' d='M183.98 440 346 220 183.98 0H0l162.02 220L0 440h183.98Z'/%3E%3C/svg%3E")`;
@@ -56,7 +53,7 @@ type ArrowCardProps = {
   total: number;
   progress: MotionValue<number>;
 };
-//Arrow style
+
 function ArrowCard({ src, index, total, progress }: ArrowCardProps) {
   const step = 0.13;
   const start = index === 0 ? 0 : 0.1 + (index - 1) * step;
@@ -155,161 +152,6 @@ function ArrowCard({ src, index, total, progress }: ArrowCardProps) {
     </motion.div>
   );
 }
-// repeated Alphabetical style
-// function ArrowCard({ src, index, total, progress }: ArrowCardProps) {
-//   const step = 0.13;
-//   const start = index === 0 ? 0 : 0.1 + (index - 1) * step;
-//   const end = index === 0 ? 0.08 : start + 0.2;
-
-//   const opacity =
-//     index === 0
-//       ? useTransform(progress, [0, 1], [1, 1])
-//       : useTransform(progress, [start, end], [0.08, 1]);
-
-//   const scale =
-//     index === 0
-//       ? useTransform(progress, [0, 1], [1, 1])
-//       : useTransform(progress, [start, end], [0.8, 1]);
-
-//   const x =
-//     index === 0
-//       ? useTransform(progress, [0, 1], ["0%", "0%"])
-//       : useTransform(progress, [start, end], ["10%", "0%"]);
-
-//   const y =
-//     index === 0
-//       ? useTransform(progress, [0, 1], [0, 0])
-//       : useTransform(progress, [start, end], [18, 0]);
-
-//   const depthStrength = (total - index - 1) * 8;
-//   const parallaxY = useTransform(progress, [0, 1], [0, -depthStrength]);
-//   const parallaxScale = useTransform(
-//     progress,
-//     [0, 1],
-//     [1, 1 - (total - index - 1) * 0.008]
-//   );
-
-//   return (
-//     <motion.div
-//       style={{ opacity, scale, x, y }}
-//       className="
-//         relative shrink-0 will-change-transform
-//         -ml-[6vw]
-//         sm:-ml-[4vw]
-//         md:-ml-[3vw]
-//         lg:-ml-[2.5vw]
-//         first:ml-0
-//       "
-//     >
-//       <motion.div
-//         style={{
-//           y: parallaxY,
-//           scale: parallaxScale,
-//         }}
-//         className="will-change-transform"
-//       >
-//         {/* TEXT MASK */}
-//         <div className="relative w-[28vw] min-w-[140px] max-w-[320px] aspect-[2/1]">
-          
-//           <svg
-//             viewBox="0 0 500 200"
-//             className="w-full h-full"
-//           >
-//             <defs>
-//               <mask id={`text-mask-${index}`}>
-//                 <rect width="100%" height="100%" fill="black" />
-//                 <text
-//                   x="50%"
-//                   y="55%"
-//                   textAnchor="middle"
-//                   dominantBaseline="middle"
-//                   fontSize="110"
-//                   fontWeight="800"
-//                   fill="white"
-//                 >
-//                   AvPlat
-//                 </text>
-//               </mask>
-//             </defs>
-
-//             {/* IMAGE INSIDE TEXT */}
-//             <image
-//               href={src}
-//               width="100%"
-//               height="100%"
-//               preserveAspectRatio="xMidYMid slice"
-//               mask={`url(#text-mask-${index})`}
-//             />
-//           </svg>
-//         </div>
-//       </motion.div>
-//     </motion.div>
-//   );
-// }
-// Alphabetical style one word at a time
-// function ArrowCard({ src, index, total, progress }: ArrowCardProps) {
-//   const letters = "AVPLAT".split("");
-//   const letter = letters[index % letters.length];
-
-//   const step = 0.13;
-//   const start = index === 0 ? 0 : 0.1 + (index - 1) * step;
-//   const end = index === 0 ? 0.08 : start + 0.2;
-
-//   const opacity =
-//     index === 0
-//       ? useTransform(progress, [0, 1], [1, 1])
-//       : useTransform(progress, [start, end], [0.1, 1]);
-
-//   const scale =
-//     index === 0
-//       ? useTransform(progress, [0, 1], [1, 1])
-//       : useTransform(progress, [start, end], [0.92, 1]);
-
-//   const x =
-//     index === 0
-//       ? useTransform(progress, [0, 1], ["0%", "0%"])
-//       : useTransform(progress, [start, end], ["6%", "0%"]);
-
-//   return (
-//     <motion.div
-//       style={{ opacity, scale, x }}
-//       className="relative shrink-0"
-//     >
-     
-//       <div className="relative w-[13vw] min-w-[100px] max-w-[160px] aspect-[1/1]">
-        
-      
-//         <svg viewBox="0 0 420 420" className="w-full h-full">
-//   <defs>
-//     <mask id={`letter-mask-${index}`}>
-//       <rect width="100%" height="100%" fill="black" />
-
-//       <text
-//         x="50%"
-//         y="54%"
-//         textAnchor="middle"
-//         dominantBaseline="middle"
-//         fontSize="360"  
-//         fontWeight="900"
-//         fill="white"
-//       >
-//         {letter}
-//       </text>
-//     </mask>
-//   </defs>
-
-//   <image
-//     href={src}
-//     width="100%"
-//     height="100%"
-//     preserveAspectRatio="xMidYMid slice"
-//     mask={`url(#letter-mask-${index})`}
-//   />
-// </svg>
-//       </div>
-//     </motion.div>
-//   );
-// }
 
 export default function ArrowSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -379,7 +221,7 @@ export default function ArrowSection() {
             style={{ y: arrowsWrapperY }}
             className="mx-auto flex w-full items-center justify-center overflow-visible"
           >
-            <div className="flex items-center justify-center -space-x-[4vw]">
+            <div className="flex w-full items-center justify-center">
               {images.map((src, i) => (
                 <ArrowCard
                   key={`${src}-${i}`}
