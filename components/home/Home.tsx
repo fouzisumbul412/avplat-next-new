@@ -8,6 +8,7 @@ import RewiredSection from "./RewiredSection";
 import ServicesSection from "./ServicesSection";
 import ForAgentsSection from "./ForAgentsSection";
 import WhyAvPlat from "./WhyAvPlat";
+import Aviation3DCarousel from "./Aviation3DCarousel";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       {/* <ScrollTextReveal /> */}
       {/* <VideoSplit /> */}
       <ArrowSection />
+      <Aviation3DCarousel />
       <RewiredSection />
       {/* <ForAgentsSection /> */}
       <ServicesSection />

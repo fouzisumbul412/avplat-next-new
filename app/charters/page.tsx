@@ -170,7 +170,7 @@ export default function CharterPage() {
       <PageHero
         title="Charter"
         image="/images/GetPaid.png"
-        overlayOpacity={0.4}
+        overlayOpacity={0.7}
       />
 
       <section className="relative">

@@ -27,11 +27,11 @@ export default function Footer() {
           <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
             Ready to elevate your aviation experience?
           </h2>
-
-          <button className="mt-6 flex items-center gap-3 border border-white/40 px-6 py-3 rounded-full hover:bg-white hover:text-black transition">
+<a href="#">
+        <button className="mt-6 flex items-center gap-3 border border-white/40 px-6 py-3 rounded-full hover:bg-white hover:text-black transition">
             Get Started
             <ArrowRight size={18} />
-          </button>
+          </button></a>
         </div>
 
         {/* LINKS */}

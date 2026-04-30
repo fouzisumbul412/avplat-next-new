@@ -152,7 +152,7 @@ export default function ServiceProvidersPage() {
       <PageHero
         title="Service Providers"
         image="/images/Accept.png"
-        overlayOpacity={0.4}
+        overlayOpacity={0.7}
       />
 
       <section className="relative">

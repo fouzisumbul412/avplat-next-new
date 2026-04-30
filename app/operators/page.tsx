@@ -152,7 +152,7 @@ export default function OperatorsPage() {
       <PageHero
         title="Operators"
         image="/images/Manage.png"
-        overlayOpacity={0.4}
+        overlayOpacity={0.7}
       />
 
       <section className="relative">
