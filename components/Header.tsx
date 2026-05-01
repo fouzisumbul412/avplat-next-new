@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,10 +21,17 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // ✅ LOGO LOGIC
+  const logoSrc = isHome
+    ? "/images/AVPLATlogo.png"
+    : scrolled
+    ? "/images/AVPLATlogo.png"
+    : "/images/avplat-logowhite.png";
+
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Air Charters", href: "/charters" },
-    { name: "Operators", href: "/operators" },
+    { name: "Operator", href: "/operators" },
     { name: "Service Provider", href: "/service-provider" },
   ];
 
@@ -35,13 +45,15 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between h-16">
         
-        {/* LOGO */}
+        {/* ✅ LOGO */}
         <div className="flex items-center">
-          <img
-            src="/images/avplat-logo.png"
-            alt="logo"
-            className="h-8 object-contain"
-          />
+          <Link href="/">
+            <img
+              src={logoSrc}
+              alt="logo"
+              className="h-10 object-contain cursor-pointer transition-all duration-300"
+            />
+          </Link>
         </div>
 
         {/* DESKTOP NAV */}
@@ -59,12 +71,10 @@ export default function Header() {
                     : "hover:text-[#213e76]"
                 }`}
               >
-                {/* TEXT WRAPPER FOR 3D EFFECT */}
                 <span className="inline-block transition-transform duration-500 [transform-style:preserve-3d] group-hover:rotateX-180">
                   {item.name}
                 </span>
 
-                {/* ACTIVE UNDERLINE */}
                 <span
                   className={`absolute left-0 -bottom-1 h-[2px] w-full transition-all duration-300 ${
                     isActive
@@ -79,30 +89,14 @@ export default function Header() {
 
         {/* RIGHT */}
         <div className="flex items-center gap-4">
-          
-          {/* LOGIN */}
           <a
             href="https://app.avplat.com/"
-            className="
-              hidden md:inline-flex items-center justify-center
-              px-5 py-2 text-sm font-medium
-              text-white bg-[#213e76]
-              rounded-full
-              transition-all duration-300 ease-in-out
-              hover:bg-[#132c52]
-              hover:shadow-lg
-              hover:-translate-y-0.5
-              active:scale-95
-            "
+            className="hidden md:inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-[#213e76] rounded-full transition-all duration-300 hover:bg-[#132c52] hover:shadow-lg hover:-translate-y-0.5 active:scale-95"
           >
             Login
           </a>
 
-          {/* MOBILE TOGGLE */}
-          <button
-            className="md:hidden"
-            onClick={() => setOpen(!open)}
-          >
+          <button className="md:hidden" onClick={() => setOpen(!open)}>
             {open ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -120,17 +114,15 @@ export default function Header() {
 
             return (
               <a
-  key={item.name}
-  href={item.href}
-  className={`nav-link ${
-    isActive ? "active" : ""
-  }`}
->
-  <span className="nav-inner">
-    <span className="nav-front">{item.name}</span>
-    <span className="nav-back">{item.name}</span>
-  </span>
-</a>
+                key={item.name}
+                href={item.href}
+                className={`nav-link ${isActive ? "active" : ""}`}
+              >
+                <span className="nav-inner">
+                  <span className="nav-front">{item.name}</span>
+                  <span className="nav-back">{item.name}</span>
+                </span>
+              </a>
             );
           })}
           <a href="https://app.avplat.com/">Login</a>

@@ -79,7 +79,7 @@ export default function RewiredSection() {
 
           {/* RIGHT SIDE */}
           <div>
-            <p className="text-sm text-gray-500 mb-6">Process:</p>
+            <p className="text-sm text-gray-500 mb-6">Operator Process:</p>
 
             <div className="space-y-2">
 
@@ -90,7 +90,7 @@ export default function RewiredSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{
                     duration: 0.6,
-                    delay: i * 0.2, // 👈 stagger
+                    delay: i * 0.2, 
                   }}
                   viewport={{ once: true }}
                   className="border-t pt-3 border-gray-300 first:border-t-0"
