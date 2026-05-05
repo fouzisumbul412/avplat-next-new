@@ -61,6 +61,18 @@ model CharterRequest {
   createdAt  DateTime @default(now())
 }
 
+model HomeContent {
+  id           String   @id @default("home_content")
+  titleBlack   String   @default("Why")
+  titleBlue    String   @default("AvPlat")
+  description  String   @db.Text
+  videoUrl     String
+  appStoreUrl  String?
+  playStoreUrl String?
+
+  updatedAt    DateTime @updatedAt
+}
+
 model DynamicPage {
   id   String @id @default(uuid())
   slug String @unique

@@ -76,19 +76,19 @@ export default function AdminSidebar({ isCollapsed, isMobileMenuOpen, setIsMobil
           </nav>
         </div>
 
-        {/* <div>
+        <div>
           {(!isCollapsed || isMobileMenuOpen) && (
             <p className="px-3 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Core Pages</p>
           )}
           <nav className="space-y-1.5">
             <NavItem to="/admin/home" icon={Home} label="Home Page" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
-            <NavItem to="/admin/about" icon={FileText} label="About Page" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
+            {/* <NavItem to="/admin/about" icon={FileText} label="About Page" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
             <NavItem to="/admin/gallery" icon={ImageIcon} label="Gallery" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
-            <NavItem to="/admin/blog" icon={PenTool} label="Insights & Blog" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
+            <NavItem to="/admin/blog" icon={PenTool} label="Insights & Blog" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} /> */}
           </nav>
         </div>
 
-        <div>
+        {/* <div>
           {(!isCollapsed || isMobileMenuOpen) && (
             <p className="px-3 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Services</p>
           )}

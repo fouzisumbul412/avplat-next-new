@@ -2,18 +2,32 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Apple, Play } from "lucide-react";
+import { Apple, Play, Loader2 } from "lucide-react";
 import AnimatedHeading from "../AnimatedHeading";
+import useSWR from "swr";
 
-const text = `Introducing AvPlat Charters: The World's First Integrated Flight Planning and Trip Support Software. Create schedule, select services and fly. It can’t get any simpler!`;
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const PLAY_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.avplat.aviation&pcampaignid=web_share.aviation&pcampaignid=web_share";
-
-const APP_STORE_URL =
-  "https://apps.apple.com/us/app/avplat/id1369917026";
-
+// 1. MAIN COMPONENT (Handles fetching and loading state)
 export default function WhyAvPlat() {
+  const { data: response, isLoading } = useSWR("/api/home", fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  if (isLoading || !response?.data) {
+    return (
+      <div className="flex w-full items-center justify-center py-32 bg-white">
+        <Loader2 className="animate-spin text-[#213e76]" size={40} />
+      </div>
+    );
+  }
+
+  // Once loaded, render the content component where the refs can safely mount
+  return <WhyAvPlatContent content={response.data} />;
+}
+
+// 2. CONTENT COMPONENT (Handles animations and refs safely)
+function WhyAvPlatContent({ content }: { content: any }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -21,13 +35,11 @@ export default function WhyAvPlat() {
     offset: ["start 80%", "end 20%"],
   });
 
-  const words = text.split(" ");
+  const words = content.description.split(" ");
 
   return (
-    <section
-      ref={containerRef}
-      className="w-full py-16 px-4 md:px-10 bg-white"
-    >
+    <section ref={containerRef} className="w-full py-16 px-4 md:px-10 bg-white">
+      {/* ... KEEP ALL YOUR EXISTING JSX GRID AND MOTION DIVS HERE ... */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         
         {/* LEFT CONTENT */}
@@ -37,63 +49,39 @@ export default function WhyAvPlat() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          {/* Heading */}
-          
-           <AnimatedHeading
-  titleBlack="Why"
-  titleBlue="AvPlat"
-  align="left"
-   size="text-[24px] md:text-[38px] lg:text-[45px]"
-/>
+          <AnimatedHeading
+            titleBlack={content.titleBlack}
+            titleBlue={content.titleBlue}
+            align="left"
+            size="text-[24px] md:text-[38px] lg:text-[45px]"
+          />
 
-          {/* Scroll Reveal Text */}
           <p className="text-base md:text-xl leading-relaxed flex flex-wrap pt-7">
-            {words.map((word, i) => {
+            {words.map((word: string, i: number) => {
               const start = i / words.length;
               const end = start + 1 / words.length;
-
-              const color = useTransform(
-                scrollYProgress,
-                [start, end],
-                ["#000000", "#213e76"]
-              );
-
+              const color = useTransform(scrollYProgress, [start, end], ["#000000", "#213e76"]);
               return (
-                <motion.span
-                  key={i}
-                  style={{ color }}
-                  className="mr-2 mb-2"
-                >
+                <motion.span key={i} style={{ color }} className="mr-2 mb-2">
                   {word}
                 </motion.span>
               );
             })}
           </p>
 
-          {/* Buttons */}
           <div className="flex flex-wrap gap-4 mt-8">
-            
-            {/* App Store */}
-            <a
-              href={APP_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-3 rounded-full border border-[#213e76] text-white bg-[#213e76] hover:bg-white hover:text-black hover:border-black transition-all duration-300"
-            >
-              <Apple size={18} />
-              <span className="text-sm font-medium">App Store</span>
-            </a>
-
-            {/* Play Store */}
-            <a
-              href={PLAY_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-3 rounded-full border border-[#213e76] text-white bg-[#213e76] hover:bg-white hover:text-black hover:border-black transition-all duration-300"
-            >
-              <Play size={18} />
-              <span className="text-sm font-medium">Play Store</span>
-            </a>
+            {content.appStoreUrl && (
+              <a href={content.appStoreUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-full border border-[#213e76] text-white bg-[#213e76] hover:bg-white hover:text-black hover:border-black transition-all duration-300">
+                <Apple size={18} />
+                <span className="text-sm font-medium">App Store</span>
+              </a>
+            )}
+            {content.playStoreUrl && (
+              <a href={content.playStoreUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-full border border-[#213e76] text-white bg-[#213e76] hover:bg-white hover:text-black hover:border-black transition-all duration-300">
+                <Play size={18} />
+                <span className="text-sm font-medium">Play Store</span>
+              </a>
+            )}
           </div>
         </motion.div>
 
@@ -105,15 +93,9 @@ export default function WhyAvPlat() {
           viewport={{ once: true }}
           className="w-full"
         >
-          <div className="relative w-full h-[500px] md:h-[550px] overflow-hidden shadow-lg">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source src="/videos/hero-mob.mp4" type="video/mp4" />
+          <div className="relative w-full h-[500px] md:h-[550px] overflow-hidden shadow-lg rounded-xl">
+            <video key={content.videoUrl} autoPlay loop muted playsInline className="w-full h-full object-cover">
+              <source src={content.videoUrl} type="video/mp4" />
             </video>
           </div>
         </motion.div>

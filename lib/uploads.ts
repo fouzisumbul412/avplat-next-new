@@ -63,6 +63,40 @@ export async function uploadImage(file: File, subfolder: string = ""): Promise<s
   return await uploadFile(file, subfolder);
 }
 
+export async function uploadVideo(file: File, subfolder: string = ""): Promise<string> {
+  if (!file) throw new Error("No file provided");
+
+  if (!file.type.startsWith("video/")) {
+    throw new Error("Invalid file type. Only videos are allowed.");
+  }
+
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  if (process.env.STORAGE_PROVIDER === "cloudinary") {
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: `avplat/${subfolder}`, resource_type: "video" }, 
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result!.secure_url);
+        }
+      );
+      uploadStream.end(buffer);
+    });
+  } else {
+    const uploadDir = await ensureUploadDir(subfolder);
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const cleanFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '');
+    const filename = `${uniqueSuffix}-${cleanFileName}`;
+    
+    const filePath = path.join(uploadDir, filename);
+    await writeFile(filePath, buffer);
+
+    return subfolder ? `/uploads/${subfolder}/${filename}` : `/uploads/${filename}`;
+  }
+}
+
 export async function deleteFile(fileUrl: string) {
   try {
     if (!fileUrl) return;
