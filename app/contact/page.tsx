@@ -18,6 +18,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 const offices = [
   {
@@ -81,16 +82,13 @@ export default function ContactPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const form = event.currentTarget;
 
     if (isSubmitting) return;
-
     if (!form.checkValidity()) {
       form.reportValidity();
       return;
     }
-
     if (!selectedService) {
       setServiceError(true);
       return;
@@ -100,14 +98,33 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     try {
-      
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      const formData = new FormData(form);
+      const payload = {
+        fullName: formData.get("fullName"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        subject: formData.get("subject"),
+        message: formData.get("message"),
+        services: [selectedService],
+      };
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit request");
+      }
 
       setShowSuccess(true);
       form.reset();
       setSelectedService("");
-    } catch (error) {
-      console.error("Contact form submission failed:", error);
+    } catch {
+      toast.error("Failed to send message");
     } finally {
       setIsSubmitting(false);
     }

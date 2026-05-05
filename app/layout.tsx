@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// ✅ IMPORT COMPONENTS
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { AuthProvider } from "@/hooks/useAuth"; 
+import { Toaster } from "react-hot-toast";
+import ClientLayout from "@/components/ClientLayout";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -41,18 +41,14 @@ export default function RootLayout({
       // className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <AuthProvider>
+          <Toaster position="top-right" />
 
-        {/* ✅ GLOBAL HEADER */}
-        <Header />
+          <ClientLayout>
+            {children}
+          </ClientLayout>
 
-        {/* ✅ PAGE CONTENT */}
-        <main className="flex-grow">
-          {children}
-        </main>
-
-        {/* ✅ GLOBAL FOOTER */}
-        <Footer />
-
+        </AuthProvider>
       </body>
     </html>
   );

@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 type BookCharterSheetProps = {
   isOpen: boolean;
   onClose: () => void;
-};
+}; 
 
 type FormValues = {
   name: string;
@@ -195,26 +195,35 @@ const BookCharterSheet = ({
     setSubmitting(true);
 
     try {
-      await fetch(
-        "https://script.google.com/macros/s/AKfycbz7owVzSx_BwRm2MSTn6TYEcrOsev3BaAfutx7yKovCJWq6sAxabn-j8gLVvDwk7ccx/exec",
-        {
-          method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify({
-            ...formValues,
-            formType: "Book Charter",
-            timestamp: new Date().toISOString(),
-          }),
-        }
-      );
+      const payload = {
+        name: formValues.name,
+        email: formValues.email,
+        phone: formValues.phone,
+        departure: formValues.departure,
+        arriving: formValues.arriving,
+        passengers: formValues.passengers,
+        departureDate: formValues.departureDate,
+        returnDate: isReturnFlight && formValues.returnDate ? formValues.returnDate : null, 
+      };
+
+      const response = await fetch("/api/charter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit request");
+      }
 
       setShowSuccessModal(true);
       onClose();
       setFormValues(initialValues);
       setHasSubmitted(false);
-    } catch (error) {
-      console.error(error);
-      toast.error("Submission failed ❌");
+    } catch {
+      toast.error("Submission failed");
     }
 
     setSubmitting(false);

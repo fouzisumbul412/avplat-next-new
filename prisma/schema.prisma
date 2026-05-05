@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String
+  name     String?
+  role     Role    @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ZohoAuth {
+  id          String   @id @default("zoho_token")
+  accessToken String   @db.Text
+  expiresAt   DateTime
+  updatedAt   DateTime @updatedAt
+}
+
+model QuoteRequest {
+  id String @id @default(uuid())
+
+  fullName String
+  phone    String
+  email    String
+  subject  String
+  services String[]
+  message  String @db.Text
+
+  zohoSynced Boolean  @default(false)
+  zohoId     String?
+  createdAt  DateTime @default(now())
+}
+
+model CharterRequest {
+  id String @id @default(uuid())
+
+  name          String
+  email         String
+  phone         String
+  departure     String
+  arriving      String
+  passengers    String
+  departureDate DateTime
+  returnDate    DateTime?
+
+  zohoSynced Boolean  @default(false)
+  zohoId     String?
+  createdAt  DateTime @default(now())
+}
+
+model DynamicPage {
+  id   String @id @default(uuid())
+  slug String @unique
+
+  heroTitle    String
+  heroSubtitle String?
+  heroDesc     String?
+  heroImage    String?
+
+  sections PageSection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SectionType {
+  INTRO
+  GRID
+  PROCESS
+  CAROUSEL
+  TABS
+  STATS
+  TEXT
+}
+
+model PageSection {
+  id     String @id @default(uuid())
+  pageId String
+
+  type  SectionType
+  order Int         @default(0)
+
+  title       String?
+  subtitle    String?
+  description String?
+  image       String?
+
+  badgeIcon  String?
+  badgeTitle String?
+  badgeDesc  String?
+
+  buttonText String?
+  buttonLink String?
+
+  tags Json?
+
+  page  DynamicPage   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  items SectionItem[]
+}
+
+model SectionItem {
+  id        String @id @default(cuid())
+  sectionId String
+  order     Int    @default(0)
+
+  title       String?
+  subtitle    String?
+  description String?
+
+  icon  String?
+  image String?
+
+  bullets   Json?
+  extraData Json?
+  section   PageSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
