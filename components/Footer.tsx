@@ -76,7 +76,7 @@ export default function Footer() {
               <li><Link href="/">Home</Link></li>
               <li><Link href="/about">About</Link></li>
               <li><Link href="/contact">Contact</Link></li>
-              {/* <li><Link href="/service-provider">Service Providers</Link></li> */}
+              <li><Link href="/blog">Blogs</Link></li>
             </ul>
           </div>
 
@@ -95,6 +95,8 @@ export default function Footer() {
             <ul className="space-y-2">
               <li><Link href="/privacy-policy">Privacy Policy</Link></li>
               <li><Link href="/terms-of-services">Terms & Conditions</Link></li>
+              <li><Link href="https://support.avplat.com/">FAQs</Link></li>
+
             </ul></div>
 
           {/* 4️⃣ CONTACT + SOCIAL */}

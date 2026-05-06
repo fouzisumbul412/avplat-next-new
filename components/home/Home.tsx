@@ -9,6 +9,7 @@ import ServicesSection from "./ServicesSection";
 import ForAgentsSection from "./ForAgentsSection";
 import WhyAvPlat from "./WhyAvPlat";
 import Aviation3DCarousel from "./Aviation3DCarousel";
+import FaqSection from "./FaqSection";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <RewiredSection />
       {/* <ForAgentsSection /> */}
       <ServicesSection />
+      <FaqSection />
     </main>
   );
 }
