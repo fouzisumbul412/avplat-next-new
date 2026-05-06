@@ -1,126 +1,17 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import {
-  FileText,
-  Handshake,
-  BellRing,
-  RefreshCcw,
-  Wallet,
-  Receipt,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import * as Icons from "lucide-react"; 
+import { Sparkles, ArrowRight } from "lucide-react";
+import useSWR from "swr"; 
 import PageHero from "@/components/PageHero";
 import OperatorFeatureSection, {
   type OperatorFeature,
 } from "@/components/operators/OperatorFeatureSection";
 import ScrollRevealText from "@/components/operators/ScrollRevealText";
+import Loader from "@/components/Loader";
 
-const features: OperatorFeature[] = [
-  {
-    id: "estimates",
-    eyebrow: "Automated Estimates",
-    title: "Stop sending fruitless estimates. Increase Productivity!",
-    description:
-      "Tired of sending multiple estimates, to multiple customers every day that don’t result in business? Register your services on the platform. Set up your service rate cards one-time and let us do the rest. Estimates will be automatically generated based on your settings.",
-    points: [
-      "Set service rate cards once",
-      "Generate estimates automatically",
-      "Reduce repetitive manual quoting",
-    ],
-    videoId: "https://youtu.be/VIDEO_ID_1",
-    icon: FileText,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "requests",
-    eyebrow: "Quick Acceptance",
-    title: "Accept service requests. At the touch of a button!",
-    description:
-      "One touch is all it takes to accept the service request from your customer – from fuel to catering, from handling to transport, from permits to flight planning. View your service requests by date, tail no, customer or service category.",
-    points: [
-      "Accept service requests instantly",
-      "View requests by date, tail no or customer",
-      "Manage by service category with ease",
-    ],
-    videoId: "https://youtu.be/VIDEO_ID_2",
-    icon: Handshake,
-    accent: "slate",
-    layout: "rightText",
-  },
-  {
-    id: "notifications",
-    eyebrow: "Live Updates",
-    title: "Activities and Notifications. Keeps you alert!",
-    description:
-      "An automated tasking and alerting system, as well as a chat system, all perfectly timed keeps you abreast and on top of your trip always.",
-    points: [
-      "Automated tasking and notifications",
-      "Real-time communication through chat",
-      "Stay updated on every service movement",
-    ],
-    videoId: "https://youtu.be/VIDEO_ID_3",
-    icon: BellRing,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "changes",
-    eyebrow: "Smooth Revisions",
-    title: "Multiple Changes and Revisions. Hassle Free!",
-    description:
-      "Change in dates. Change in times. Change in destination. Change in passengers. Are you being bombarded with calls and emails? Our platform eliminates these problems, automatically keeps everything coordinated and provides timely alerts on what needs to be done.",
-    points: [
-      "Handle multiple changes without chaos",
-      "Automatic coordination across updates",
-      "Timely alerts for required actions",
-    ],
-    videoId: "https://youtu.be/VIDEO_ID_4",
-    icon: RefreshCcw,
-    accent: "slate",
-    layout: "rightText",
-  },
-  {
-    id: "payments",
-    eyebrow: "Cashflow Support",
-    title: "Get paid. On Time!",
-    description:
-      "Prompt bi-weekly settlements increase your cashflow. Eliminate Accounts Receivables hassles.",
-    points: [
-      "Prompt bi-weekly settlements",
-      "Improve cashflow visibility",
-      "Reduce receivables follow-up effort",
-    ],
-    videoId: "https://youtu.be/VIDEO_ID_5",
-    icon: Wallet,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "billing",
-    eyebrow: "Billing Simplified",
-    title: "Raise your bills. Hassle Free!",
-    description:
-      "Invoices are auto-generated and customer wallets auto-deducted. View and retrieve your invoices by trip, by date or by service category. Eliminate Accounts Receivable hassles.",
-    points: [
-      "Auto-generated invoices",
-      "Customer wallet auto-deduction",
-      "Retrieve invoices by trip, date or category",
-    ],
-    videoId: "https://youtu.be/VIDEO_ID_6",
-    icon: Receipt,
-    accent: "slate",
-    layout: "rightText",
-  },
-];
-
-const heroStats = [
-  { label: "One-Time Setup", value: "Configure rate cards once" },
-  { label: "One Touch", value: "Accept service requests instantly" },
-  { label: "On Time", value: "Bi-weekly settlements & easy billing" },
-];
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const staggerContainer: Variants = {
   hidden: {},
@@ -147,11 +38,35 @@ const staggerItem: Variants = {
 };
 
 export default function ServiceProvidersPage() {
+  const { data, isLoading } = useSWR("/api/pages/service-providers", fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!data?.success || !data?.data) {
+    return null;
+  }
+
+  const pageData = data.data;
+  const heroStats = pageData.stats || [];
+
+  const features: OperatorFeature[] = pageData.features?.map((f: any) => ({
+    ...f,
+    icon: (Icons as any)[f.icon] || Icons.Star, 
+  })) || [];
+
   return (
     <main className="overflow-hidden bg-white text-slate-900 dark:bg-white dark:text-slate-900">
       <PageHero
-        title="Service Providers"
-        image="/images/Accept.png"
+        title={pageData.pageTitle} 
+        image={pageData.heroImage || "/images/Accept.png"}
         overlayOpacity={0.7}
       />
 
@@ -171,18 +86,20 @@ export default function ServiceProvidersPage() {
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-[28px] border border-slate-200/80 bg-white/90 p-6 shadow-[0_16px_40px_rgba(18,38,63,0.06)] backdrop-blur xl:p-10"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
-                <Sparkles className="h-4 w-4" />
-                Service Provider Platform
-              </div>
+              {pageData.badgeText && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
+                  <Sparkles className="h-4 w-4" />
+                  {pageData.badgeText}
+                </div>
+              )}
 
               <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight md:text-5xl">
-                A smarter way for service providers to quote, accept, coordinate and get paid.
+                {pageData.heroTitle} 
               </h2>
 
               <div className="mt-5 max-w-3xl">
                 <ScrollRevealText
-                  text="This page follows the same cleaner, tighter and more premium experience as the operators page — with separate videos for each service provider workflow, brighter surfaces and less clutter."
+                  text={pageData.heroDescription} 
                   className="text-base leading-7 text-slate-600 md:text-lg"
                 />
               </div>
@@ -214,9 +131,9 @@ export default function ServiceProvidersPage() {
               viewport={{ once: true, amount: 0.2 }}
               className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1"
             >
-              {heroStats.map((item) => (
+              {heroStats.map((item: any) => (
                 <motion.div
-                  key={item.label}
+                  key={item.id || item.label}
                   variants={staggerItem}
                   className="rounded-[24px] border border-slate-200/80 bg-white p-5 shadow-[0_14px_30px_rgba(18,38,63,0.05)]"
                 >
@@ -240,7 +157,7 @@ export default function ServiceProvidersPage() {
         <div className="space-y-8 md:space-y-10">
           {features.map((feature, index) => (
             <OperatorFeatureSection
-              key={feature.id}
+              key={feature.id || index}
               feature={feature}
               index={index}
             />

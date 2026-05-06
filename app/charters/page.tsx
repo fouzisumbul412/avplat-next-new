@@ -1,144 +1,17 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import {
-  Plane,
-  SearchCheck,
-  BadgeCheck,
-  Globe2,
-  BellRing,
-  RefreshCcw,
-  CreditCard,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import * as Icons from "lucide-react"; 
+import { Sparkles, ArrowRight } from "lucide-react";
+import useSWR from "swr"; 
 import PageHero from "@/components/PageHero";
 import OperatorFeatureSection, {
   type OperatorFeature,
 } from "@/components/operators/OperatorFeatureSection";
 import ScrollRevealText from "@/components/operators/ScrollRevealText";
+import Loader from "@/components/Loader";
 
-const features: OperatorFeature[] = [
-  {
-    id: "intro",
-    eyebrow: "AvPlat Trips",
-    title:
-      "Introducing AvPlat Trips: The World’s First Integrated Aircraft Charter Marketplace.",
-    description:
-      "Search aircraft, compare options, book instantly, and take off with ease. It can’t get any simpler!",
-    points: [
-      "Search aircraft easily",
-      "Compare curated options",
-      "Book instantly with confidence",
-    ],
-    videoId: "IlbOpSccI_E",
-    icon: Plane,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "quotes",
-    eyebrow: "Instant Quotes",
-    title: "Create Itinerary and Get Instant Quotes!",
-    description:
-      "30 seconds is all it takes to enter your schedule, explore curated fleet and get instant charter estimates. Compare options, select the right aircraft and book when you’re ready.",
-    points: [
-      "Enter your schedule in seconds",
-      "Explore a curated fleet",
-      "Get instant charter estimates",
-    ],
-    videoId: "yrQKUfTskIE",
-    icon: SearchCheck,
-    accent: "slate",
-    layout: "rightText",
-  },
-  {
-    id: "activate",
-    eyebrow: "Trip Activation",
-    title: "Confirm and Activate Your Trip. Instantly!",
-    description:
-      "Once you’ve selected your aircraft, simply make the payment to confirm your booking. With one click, your trip is activated and everything is set in motion. Sit back and relax as your journey is seamlessly managed from start to finish.",
-    points: [
-      "Confirm booking with payment",
-      "Activate the trip with one click",
-      "End-to-end journey coordination",
-    ],
-    videoId: "IlbOpSccI_E",
-    icon: BadgeCheck,
-    accent: "blue",
-    layout: "centerSplit",
-  },
-  {
-    id: "fleet",
-    eyebrow: "World-Class Fleet",
-    title: "Direct Access to a World-Class Fleet.",
-    description:
-      "Explore a diverse fleet and select the perfect aircraft for your mission. With direct access to operators, avoid layers of intermediaries, reduce brokerage costs and enjoy complete pricing transparency.",
-    points: [
-      "Explore a diverse fleet",
-      "Direct access to operators",
-      "Transparent pricing with lower brokerage costs",
-    ],
-    videoId: "yrQKUfTskIE",
-    icon: Globe2,
-    accent: "slate",
-    layout: "leftText",
-  },
-  {
-    id: "updates",
-    eyebrow: "Live Updates",
-    title: "Stay Updated. Every Step of the Way!",
-    description:
-      "Get real-time updates, alerts and notifications throughout your journey. Trip updates and seamless communication ensure you stay on top of every detail from start to finish.",
-    points: [
-      "Real-time alerts and notifications",
-      "Stay informed throughout the trip",
-      "Seamless communication end to end",
-    ],
-    videoId: "IlbOpSccI_E",
-    icon: BellRing,
-    accent: "blue",
-    layout: "rightText",
-  },
-  {
-    id: "changes",
-    eyebrow: "Flexible Planning",
-    title: "Change Plans. Effortlessly!",
-    description:
-      "Modify your itinerary, passengers or schedule anytime. The platform automatically updates and informs everyone involved, keeping your trip smooth and stress-free.",
-    points: [
-      "Change itinerary anytime",
-      "Update passengers and schedule easily",
-      "Automatic coordination for everyone involved",
-    ],
-    videoId: "yrQKUfTskIE",
-    icon: RefreshCcw,
-    accent: "slate",
-    layout: "centerSplit",
-  },
-  {
-    id: "payments",
-    eyebrow: "Flexible Payments",
-    title: "Flexible Payments. Seamless Experience.",
-    description:
-      "Pay using credit cards and a range of convenient options. Fast, secure and designed to fit your preferences—every time.",
-    points: [
-      "Credit card support",
-      "Convenient payment options",
-      "Fast and secure checkout experience",
-    ],
-    videoId: "IlbOpSccI_E",
-    icon: CreditCard,
-    accent: "blue",
-    layout: "leftText",
-  },
-];
-
-const heroStats = [
-  { label: "30 Seconds", value: "Create itinerary & get quotes" },
-  { label: "Instant Booking", value: "Confirm and activate fast" },
-  { label: "Direct Access", value: "Transparent fleet pricing" },
-];
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const staggerContainer: Variants = {
   hidden: {},
@@ -165,11 +38,35 @@ const staggerItem: Variants = {
 };
 
 export default function CharterPage() {
+  const { data, isLoading } = useSWR("/api/pages/charter", fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!data?.success || !data?.data) {
+    return null;
+  }
+
+  const pageData = data.data;
+  const heroStats = pageData.stats || [];
+
+  const features: OperatorFeature[] = pageData.features?.map((f: any) => ({
+    ...f,
+    icon: (Icons as any)[f.icon] || Icons.Star,
+  })) || [];
+
   return (
     <main className="overflow-hidden bg-white text-slate-900 dark:bg-white dark:text-slate-900">
       <PageHero
-        title="Charter"
-        image="/images/GetPaid.png"
+        title={pageData.pageTitle}
+        image={pageData.heroImage || "/images/GetPaid.png"}
         overlayOpacity={0.7}
       />
 
@@ -189,18 +86,20 @@ export default function CharterPage() {
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-[28px] border border-slate-200/80 bg-white/90 p-6 shadow-[0_16px_40px_rgba(18,38,63,0.06)] backdrop-blur xl:p-10"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
-                <Sparkles className="h-4 w-4" />
-                Charter Marketplace
-              </div>
+              {pageData.badgeText && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
+                  <Sparkles className="h-4 w-4" />
+                  {pageData.badgeText}
+                </div>
+              )}
 
               <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight md:text-5xl">
-                Search, compare, book and fly — all in one seamless charter experience.
+                {pageData.heroTitle} 
               </h2>
 
               <div className="mt-5 max-w-3xl">
                 <ScrollRevealText
-                  text="AvPlat Trips is designed to make charter booking simpler, faster and more transparent — from itinerary creation and instant quotes to real-time updates, flexible changes and secure payments."
+                  text={pageData.heroDescription}
                   className="text-base leading-7 text-slate-600 md:text-lg"
                 />
               </div>
@@ -232,9 +131,9 @@ export default function CharterPage() {
               viewport={{ once: true, amount: 0.2 }}
               className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1"
             >
-              {heroStats.map((item) => (
+              {heroStats.map((item: any) => (
                 <motion.div
-                  key={item.label}
+                  key={item.id || item.label}
                   variants={staggerItem}
                   className="rounded-[24px] border border-slate-200/80 bg-white p-5 shadow-[0_14px_30px_rgba(18,38,63,0.05)]"
                 >
@@ -258,7 +157,7 @@ export default function CharterPage() {
         <div className="space-y-8 md:space-y-10">
           {features.map((feature, index) => (
             <OperatorFeatureSection
-              key={feature.id}
+              key={feature.id || index}
               feature={feature}
               index={index}
             />

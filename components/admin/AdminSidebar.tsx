@@ -8,7 +8,8 @@ import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, Home, FileText, Image as ImageIcon, 
   PenTool, PlaneTakeoff, MessageSquare, Users, Settings, 
-  LogOut, X, Plane, Fuel, Globe2, TrendingUp, Wrench 
+  LogOut, X, Plane, Fuel, Globe2, TrendingUp, Wrench, 
+  Handshake
 } from 'lucide-react';
 
 const NavItem = ({ to, icon: Icon, label, isCollapsed, isMobileMenuOpen }: any) => {
@@ -88,19 +89,16 @@ export default function AdminSidebar({ isCollapsed, isMobileMenuOpen, setIsMobil
           </nav>
         </div>
 
-        {/* <div>
+        <div>
           {(!isCollapsed || isMobileMenuOpen) && (
             <p className="px-3 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Services</p>
           )}
           <nav className="space-y-1.5">
-            <NavItem to="/admin/pages/charters" icon={Plane} label="Charters" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
-            <NavItem to="/admin/pages/contract-fuel" icon={Fuel} label="Contract Fuel" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
-            <NavItem to="/admin/pages/trip-support" icon={Globe2} label="Trip Support" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
-            <NavItem to="/admin/pages/brokerage" icon={TrendingUp} label="Brokerage" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
-            <NavItem to="/admin/pages/maintenance" icon={Wrench} label="Maintenance" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
-            <NavItem to="/admin/pages/crew-leasing" icon={Users} label="Crew Leasing" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
+            <NavItem to="/admin/pages/charter" icon={Plane} label="Air Charters" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
+            <NavItem to="/admin/pages/operators" icon={Users} label="Operators" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
+            <NavItem to="/admin/pages/service-providers" icon={Handshake} label="Service Providers" isCollapsed={isCollapsed} isMobileMenuOpen={isMobileMenuOpen} />
           </nav>
-        </div> */}
+        </div>
         
         <div>
           {(!isCollapsed || isMobileMenuOpen) && (

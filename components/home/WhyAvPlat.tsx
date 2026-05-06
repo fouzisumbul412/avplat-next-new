@@ -2,44 +2,24 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Apple, Play, Loader2 } from "lucide-react";
+import { Apple, Play } from "lucide-react";
 import AnimatedHeading from "../AnimatedHeading";
-import useSWR from "swr";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-// 1. MAIN COMPONENT (Handles fetching and loading state)
-export default function WhyAvPlat() {
-  const { data: response, isLoading } = useSWR("/api/home", fetcher, {
-    revalidateOnFocus: false,
-  });
-
-  if (isLoading || !response?.data) {
-    return (
-      <div className="flex w-full items-center justify-center py-32 bg-white">
-        <Loader2 className="animate-spin text-[#213e76]" size={40} />
-      </div>
-    );
-  }
-
-  // Once loaded, render the content component where the refs can safely mount
-  return <WhyAvPlatContent content={response.data} />;
-}
-
-// 2. CONTENT COMPONENT (Handles animations and refs safely)
-function WhyAvPlatContent({ content }: { content: any }) {
+export default function WhyAvPlat({ content }: { content: any }) {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Failsafe in case content is not yet available
+  if (!content) return null;
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start 80%", "end 20%"],
   });
 
-  const words = content.description.split(" ");
+  const words = content.description ? content.description.split(" ") : [];
 
   return (
     <section ref={containerRef} className="w-full py-16 px-4 md:px-10 bg-white">
-      {/* ... KEEP ALL YOUR EXISTING JSX GRID AND MOTION DIVS HERE ... */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         
         {/* LEFT CONTENT */}

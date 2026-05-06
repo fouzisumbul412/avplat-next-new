@@ -4,63 +4,18 @@ import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-type Step = {
-  id: number;
-  title: string;
-  desc: string;
-  screenTitle: string;
-  image: string;
-};
-
-const walkthroughSteps: Step[] = [
-  {
-    id: 1,
-    title: "Create Itinerary and Get Instant Quotes!",
-    desc: "30 seconds is all it takes to enter your schedule, explore curated fleet and get instant charter estimates. Compare options, select the right aircraft and Book when you’re ready.",
-    screenTitle: "Plan Trip",
-    image: "/images/step-1.png",
-  },
-  {
-    id: 2,
-    title: "Confirm and Activate Your Trip. Instantly!",
-    desc: "Once you’ve selected your aircraft, simply make the payment to confirm your booking. With one click, your trip is activated and everything is set in motion. Sit back and relax as your journey is seamlessly managed from start to finish.",
-    screenTitle: "Confirm Booking",
-    image: "/images/step-2.png",
-  },
-  {
-    id: 3,
-    title: "Direct Access to a World-Class Fleet.",
-    desc: "Explore a diverse fleet and select the perfect aircraft for your mission. With direct access to operators, avoid layers of intermediaries, reduce brokerage costs and enjoy complete pricing transparency.",
-    screenTitle: "Select Aircraft",
-    image: "/images/step-3.png",
-  },
-  {
-    id: 4,
-    title: "Stay Updated. Every Step of the Way!",
-    desc: "Get real-time updates, alerts and notifications throughout your journey. trip updates and seamless communication, ensuring you stay on top of every detail from start to finish.",
-    screenTitle: "Live Updates",
-    image: "/images/step-4.png",
-  },
-  {
-    id: 5,
-    title: "Change Plans. Effortlessly!",
-    desc: "Modify your itinerary, passengers or schedule anytime. The platform automatically updates and informs everyone involved, keeping your trip smooth and stress-free.",
-    screenTitle: "Modify Plans",
-    image: "/images/step-5.jpg",
-  },
-  {
-    id: 6,
-    title: "Flexible Payments. Seamless Experience.",
-    desc: "Pay using credit cards and a range of convenient options. Fast, secure and designed to fit your preferences—every time.",
-    screenTitle: "Secure Payment",
-    image: "/images/step-6.png",
-  },
-];
-
-export default function Aviation3DCarousel() {
+export default function Aviation3DCarousel({ items = [] }: { items: any[] }) {
   const [index, setIndex] = useState(0);
   const [hover, setHover] = useState(false);
   const touchStartX = useRef(0);
+
+  const walkthroughSteps = items.map((item, i) => ({
+    id: i + 1,
+    title: item.title,
+    desc: item.description,
+    screenTitle: item.link || "Step", 
+    image: item.image,
+  }));
 
   const total = walkthroughSteps.length;
   const getIndex = (i: number) => (i + total) % total;
@@ -70,10 +25,10 @@ export default function Aviation3DCarousel() {
 
   // Autoplay
   useEffect(() => {
-    if (hover) return;
+    if (hover || total === 0) return;
     const int = setInterval(next, 3500);
     return () => clearInterval(int);
-  }, [hover]);
+  }, [hover, total]);
 
   // Swipe
   const onTouchStart = (e: React.TouchEvent) => {
@@ -85,6 +40,9 @@ export default function Aviation3DCarousel() {
     if (diff > 50) prev();
     if (diff < -50) next();
   };
+
+  // Prevent rendering if there are no items
+  if (total === 0) return null;
 
   const visible = [
     getIndex(index - 1),
@@ -102,9 +60,6 @@ export default function Aviation3DCarousel() {
     >
       {/* Header */}
       <div className="text-center mb-10">
-        {/* <p className="text-sm tracking-widest text-gray-400 uppercase">
-          Booking Flow
-        </p> */}
         <h2 className="text-3xl md:text-4xl font-semibold">
           Private Charter Journey
         </h2>
@@ -123,7 +78,7 @@ export default function Aviation3DCarousel() {
 
             return (
               <motion.div
-                key={itemIndex}
+                key={walkthroughSteps[itemIndex].id} // Using dynamic ID
                 animate={{
                   scale: isCenter ? 1 : 0.85,
                   rotateY: isCenter ? 0 : i === 0 ? 25 : -25,
@@ -148,14 +103,14 @@ export default function Aviation3DCarousel() {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
 
-                  {/* Overlay Gradient (optional premium feel) */}
+                  {/* Overlay Gradient */}
                   {!isCenter && (
-  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-)}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  )}
 
-                  {/* Minimal UI (top label only) */}
+                  {/* Minimal UI (dynamic screenTitle label) */}
                   <div className="absolute top-4 left-4 text-xs text-blue-950">
-                    Step {walkthroughSteps[itemIndex].id}
+                    {walkthroughSteps[itemIndex].screenTitle}
                   </div>
 
                 </div>
@@ -190,7 +145,7 @@ export default function Aviation3DCarousel() {
           </motion.div>
         </div>
 
-        {/* OUTSIDE CONTENT (KEY FIX ✅) */}
+        {/* OUTSIDE CONTENT */}
         <div className="mt-10 max-w-xl text-center px-6">
           <h3 className="text-xl md:text-2xl font-semibold">
             {walkthroughSteps[index].title}

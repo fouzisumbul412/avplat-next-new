@@ -1,126 +1,17 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import {
-  CalendarRange,
-  PlaneTakeoff,
-  Network,
-  BellRing,
-  RefreshCcw,
-  CreditCard,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import * as Icons from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
+import useSWR from "swr";
 import PageHero from "@/components/PageHero";
 import OperatorFeatureSection, {
   type OperatorFeature,
 } from "@/components/operators/OperatorFeatureSection";
 import ScrollRevealText from "@/components/operators/ScrollRevealText";
+import Loader from "@/components/Loader"; 
 
-const features: OperatorFeature[] = [
-  {
-    id: "itinerary",
-    eyebrow: "Plan Faster",
-    title: "Create Itinerary and Trip Estimates. Instantly!",
-    description:
-      "30 seconds is all it takes to create a schedule, select services and generate a trip estimate. Share the itinerary with your team instantly. Activate the trip when you are ready.",
-    points: [
-      "Create schedules in seconds",
-      "Select services instantly",
-      "Generate trip estimates quickly",
-    ],
-    videoId: "IlbOpSccI_E",
-    icon: CalendarRange,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "activation",
-    eyebrow: "One-Touch Ops",
-    title: "Activate your trip. At the touch of a button!",
-    description:
-      "One touch is all it takes to activate your trip and get all you need – from fuel to catering, from handling to transport, from permits to flight planning. Sit back and relax as your trip progresses from start to finish.",
-    points: [
-      "Activate the trip instantly",
-      "Coordinate fuel, catering and handling",
-      "Track progress from start to finish",
-    ],
-    videoId: "dQw4w9WgXcQ",
-    icon: PlaneTakeoff,
-    accent: "slate",
-    layout: "rightText",
-  },
-  {
-    id: "vendors",
-    eyebrow: "Better Cost Control",
-    title: "Extensive Vendor Network. No Cascading Costs!",
-    description:
-      "Our marketplace approach enables you to select vendors of your choice, with price discovery and quality discovery. Setup your preferred vendors. Execute the trip yourself, eliminating multiple layers of intermediaries, while drastically lowering your costs.",
-    points: [
-      "Choose preferred vendors",
-      "Compare price and quality",
-      "Reduce intermediary layers",
-    ],
-    videoId: "dQw4w9WgXcQ",
-    icon: Network,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "alerts",
-    eyebrow: "Stay Updated",
-    title: "Activities. Notifications. Keeps you alert!",
-    description:
-      "An automated tasking and alerting system, as well as a chat system, all perfectly timed keeps you abreast and on top of your trip always.",
-    points: [
-      "Automated tasking and alerts",
-      "Built-in chat system",
-      "Perfectly timed trip updates",
-    ],
-    videoId: "dQw4w9WgXcQ",
-    icon: BellRing,
-    accent: "slate",
-    layout: "rightText",
-  },
-  {
-    id: "changes",
-    eyebrow: "Flexible Changes",
-    title: "Change Itinerary, Passengers. As much as you want!",
-    description:
-      "Change dates. Change times. Change destination. Change passengers. Change as much as you want without any hassles. The platform notifies all stakeholders automatically and keeps everything coordinated.",
-    points: [
-      "Update dates, times and destinations",
-      "Edit passengers easily",
-      "Notify all stakeholders automatically",
-    ],
-    videoId: "dQw4w9WgXcQ",
-    icon: RefreshCcw,
-    accent: "blue",
-    layout: "leftText",
-  },
-  {
-    id: "billing",
-    eyebrow: "Billing Simplified",
-    title: "Pay your bills. Hassle Free!",
-    description:
-      "Invoices are auto-generated and charged on your wallet. View and retrieve your invoices by trip, by date or by service category. Eliminate accounts payables hassles.",
-    points: [
-      "Auto-generated invoices",
-      "Wallet-based charging",
-      "Retrieve invoices by trip, date or service category",
-    ],
-    videoId: "dQw4w9WgXcQ",
-    icon: CreditCard,
-    accent: "slate",
-    layout: "rightText",
-  },
-];
-
-const heroStats = [
-  { label: "30 Seconds", value: "Trip schedule & estimate" },
-  { label: "One Touch", value: "Trip activation workflow" },
-  { label: "Lower Costs", value: "Marketplace-led execution" },
-];
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const staggerContainer: Variants = {
   hidden: {},
@@ -147,11 +38,36 @@ const staggerItem: Variants = {
 };
 
 export default function OperatorsPage() {
+  const { data, isLoading } = useSWR("/api/pages/operators", fetcher, {
+    revalidateOnFocus: false,
+  });
+
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!data?.success || !data?.data) {
+    return null;
+  }
+
+  const pageData = data.data;
+  const heroStats = pageData.stats || [];
+
+  const features: OperatorFeature[] = pageData.features?.map((f: any) => ({
+    ...f,
+    icon: (Icons as any)[f.icon] || Icons.Star,
+  })) || [];
+
   return (
     <main className="overflow-hidden bg-white text-slate-900 dark:bg-white dark:text-slate-900">
       <PageHero
-        title="Operators"
-        image="/images/Manage.png"
+        title={pageData.pageTitle} 
+        image={pageData.heroImage || "/images/Manage.png"}
         overlayOpacity={0.7}
       />
 
@@ -171,18 +87,20 @@ export default function OperatorsPage() {
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-[28px] border border-slate-200/80 bg-white/90 p-6 shadow-[0_16px_40px_rgba(18,38,63,0.06)] backdrop-blur xl:p-10"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
-                <Sparkles className="h-4 w-4" />
-                Operator Platform
-              </div>
+              {pageData.badgeText && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#213e76]/10 bg-[#213e76]/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#213e76]">
+                  <Sparkles className="h-4 w-4" />
+                  {pageData.badgeText}
+                </div>
+              )}
 
               <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight md:text-5xl">
-                A smarter way to plan, activate and manage every trip.
+                {pageData.heroTitle}
               </h2>
 
               <div className="mt-5 max-w-3xl">
                 <ScrollRevealText
-                  text="This page is designed to feel cleaner, tighter and more premium — with stronger video focus, lighter surfaces, less clutter and more depth without filling the screen with repetitive cards."
+                  text={pageData.heroDescription} 
                   className="text-base leading-7 text-slate-600 md:text-lg"
                 />
               </div>
@@ -214,9 +132,9 @@ export default function OperatorsPage() {
               viewport={{ once: true, amount: 0.2 }}
               className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1"
             >
-              {heroStats.map((item) => (
+              {heroStats.map((item: any) => (
                 <motion.div
-                  key={item.label}
+                  key={item.id || item.label}
                   variants={staggerItem}
                   className="rounded-[24px] border border-slate-200/80 bg-white p-5 shadow-[0_14px_30px_rgba(18,38,63,0.05)]"
                 >
@@ -240,7 +158,7 @@ export default function OperatorsPage() {
         <div className="space-y-8 md:space-y-10">
           {features.map((feature, index) => (
             <OperatorFeatureSection
-              key={feature.id}
+              key={feature.id || index}
               feature={feature}
               index={index}
             />

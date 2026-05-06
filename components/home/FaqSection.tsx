@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Accordion,
@@ -9,48 +9,26 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-interface FAQItem {
-  id: number;
-  question: string;
-  answer: string;
-  image: string;
-}
+const FaqSection = ({ items = [] }: { items: any[] }) => {
 
-const faqs: FAQItem[] = [
-  {
-    id: 1,
-    question: "How does AvPlat simplify private jet booking?",
-    answer:
-      "AvPlat allows users to search aircraft, compare pricing, and confirm bookings instantly through a unified digital platform.",
-    image: "/images/404375.jpg",
-  },
-  {
-    id: 2,
-    question: "Can I compare multiple aircraft options?",
-    answer:
-      "Users can compare aircraft types, pricing, amenities, and range in real-time before booking.",
-    image: "/images/803406.jpg",
-  },
-  {
-    id: 3,
-    question: "Is pricing transparent on the platform?",
-    answer:
-      "AvPlat provides clear pricing breakdowns with no hidden brokerage fees.",
-    image: "/images/a1.jpeg",
-  },
-  {
-    id: 4,
-    question: "Does AvPlat support global operations?",
-    answer:
-      "Yes, AvPlat supports operators, vendors, and customers globally through a scalable aviation ecosystem.",
-    image: "/images/a3.jpeg",
-  },
-];
+  const faqs = items.map((item) => ({
+    id: item.id,
+    question: item.title,
+    answer: item.description,
+    image: item.image,
+  }));
 
-const FaqSection = () => {
+  const [activeImage, setActiveImage] = useState("");
+  const [activeId, setActiveId] = useState<string | number>("");
 
-  const [activeImage, setActiveImage] = useState(faqs[0].image);
-  const [activeId, setActiveId] = useState(1);
+  useEffect(() => {
+    if (faqs.length > 0 && !activeImage) {
+      setActiveImage(faqs[0].image);
+      setActiveId(faqs[0].id);
+    }
+  }, [faqs, activeImage]);
+
+  if (faqs.length === 0) return null;
 
   return (
     <section className="py-16 bg-white">
@@ -80,7 +58,7 @@ const FaqSection = () => {
             <Accordion
               type="single"
               collapsible
-              defaultValue="item-1"
+              defaultValue={`item-${faqs[0]?.id}`}
               className="w-full"
             >
 

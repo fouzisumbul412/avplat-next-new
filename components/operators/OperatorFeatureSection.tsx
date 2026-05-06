@@ -52,6 +52,18 @@ const listItem: Variants = {
   },
 };
 
+function extractYouTubeId(urlOrId: string) {
+  if (!urlOrId) return "";
+  
+  if (urlOrId.length === 11 && !urlOrId.includes("/") && !urlOrId.includes(".")) {
+    return urlOrId;
+  }
+
+  const match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]{11})/);
+  
+  return match ? match[1] : urlOrId; 
+}
+
 function VideoBlock({
   title,
   videoId,
@@ -63,6 +75,8 @@ function VideoBlock({
 }) {
   const accentGlow =
     accent === "blue" ? "bg-[#213e76]/12" : "bg-slate-300/40";
+
+  const parsedVideoId = extractYouTubeId(videoId);
 
   return (
     <div className="relative [perspective:1600px]">
@@ -97,7 +111,7 @@ function VideoBlock({
             <div className="aspect-[16/10] w-full">
               <iframe
                 className="h-full w-full"
-                src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`}
+                src={`https://www.youtube.com/embed/${parsedVideoId}?rel=0&modestbranding=1&playsinline=1`}
                 title={title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"

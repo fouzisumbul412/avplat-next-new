@@ -1,208 +1,127 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getAdmin } from "@/lib/auth";
 import { uploadImage, deleteFile } from "@/lib/uploads";
-import { dynamicPageSchema } from "./validation";
+import { z } from "zod";
 import { MAX_FILE_SIZE } from "@/lib/constants";
 
-export async function POST( req: NextRequest,  { params }: { params: Promise<{ slug: string }> } ) {
+const pageSchema = z.object({
+  pageTitle: z.string().min(1, "Page title is required"),
+  badgeText: z.string().optional().nullable(),
+  heroTitle: z.string().min(1, "Hero title is required"),
+  heroDescription: z.string().min(1, "Hero description is required"),
+});
+
+const statSchema = z.object({
+  id: z.string().optional(),  
+  label: z.string().min(1, "Stat label is required"),
+  value: z.string().min(1, "Stat value is required"),
+});
+
+const featureSchema = z.object({
+  id: z.string().optional(),  
+  eyebrow: z.string().optional().nullable(),
+  title: z.string().min(1, "Feature title is required"),
+  description: z.string().min(1, "Feature description is required"),
+  points: z.array(z.string()),
+  videoId: z.string().optional().nullable(),
+  icon: z.string().optional().nullable(),
+  accent: z.enum(["blue", "slate"]).default("blue"),
+  layout: z.enum(["leftText", "rightText", "centerSplit"]).default("leftText"),
+});
+
+export async function POST( req: NextRequest, { params }: { params: Promise<{ slug: string }> } ) {
   try {
     const admin = await getAdmin();
-    if (!admin){
-        return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    if (!admin) {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
     const { slug } = await params;
     const formData = await req.formData();
-    
-    const pageDataString = formData.get("pageData") as string || "{}";
-    const parsedData = JSON.parse(pageDataString);
 
-    const validation = dynamicPageSchema.safeParse(parsedData);
-    if (!validation.success) {
-      return NextResponse.json({ success: false, message: validation.error.issues[0].message }, { status: 400 });
+    const payload = {
+      pageTitle: formData.get("pageTitle") as string,
+      badgeText: formData.get("badgeText") as string,
+      heroTitle: formData.get("heroTitle") as string,
+      heroDescription: formData.get("heroDescription") as string,
+    };
+
+    const pageValidation = pageSchema.safeParse(payload);
+    if (!pageValidation.success) {
+      return NextResponse.json({ success: false, message: pageValidation.error.issues[0].message }, { status: 400 });
     }
 
-    const data = validation.data;
-    const existingPage = await prisma.dynamicPage.findUnique({
+    const rawStats = JSON.parse((formData.get("stats") as string) || "[]");
+    const rawFeatures = JSON.parse((formData.get("features") as string) || "[]");
+
+    const statsValidation = z.array(statSchema).safeParse(rawStats);
+    const featuresValidation = z.array(featureSchema).safeParse(rawFeatures);
+
+    if (!statsValidation.success) {
+      return NextResponse.json({ success: false, message: "Invalid stats format" }, { status: 400 });
+    }
+    if (!featuresValidation.success) {
+      return NextResponse.json({ success: false, message: "Invalid features format" }, { status: 400 });
+    }
+
+    const existingPage = await prisma.featurePage.findUnique({ where: { slug } });
+
+    // image upload
+    let heroImage = existingPage?.heroImage || null;
+    const imageFile = formData.get("heroImage") as File | null;
+
+    if (imageFile && imageFile.size > 0 && imageFile.name !== 'undefined') {
+
+      if (imageFile.size > MAX_FILE_SIZE){
+        return NextResponse.json({ success: false, message: `Image size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB` }, { status: 400 });
+      }
+
+      if (existingPage?.heroImage) {
+        await deleteFile(existingPage.heroImage);
+      }
+      heroImage = await uploadImage(imageFile, `pages/${slug}`);
+    }
+
+    const savedPage = await prisma.featurePage.upsert({
       where: { slug },
-      include: { sections: { include: { items: true } } }
+      update: { ...pageValidation.data, heroImage },
+      create: { slug, ...pageValidation.data, heroImage }
     });
 
-    let heroImagePath = data.heroImage || "";
-    
-    const uploadTasks: { file: File; path: string; applyResult: (url: string) => void }[] = [];
+    // stats
+    const incomingStatIds = statsValidation.data.map(s => s.id).filter(Boolean) as string[];
 
-    const heroFile = formData.get("heroImage") as File | null;
-    if (heroFile && heroFile.size > 0) {
-      if (heroFile.size > MAX_FILE_SIZE) {
-        return NextResponse.json({ success: false, message: `Hero image exceeds the ${MAX_FILE_SIZE / 1024 / 1024}MB limit.` }, { status: 400 });
-      }
-      uploadTasks.push({
-        file: heroFile,
-        path: `pages/${slug}`,
-        applyResult: (url) => { heroImagePath = url; }
-      });
-    }
+    await prisma.pageStat.deleteMany({
+      where: { pageId: savedPage.id, id: { notIn: incomingStatIds } }
+    });
 
-    for (let sIndex = 0; sIndex < data.sections.length; sIndex++) {
-      const section = data.sections[sIndex];
-      const sectionFile = formData.get(`section_${sIndex}_image`) as File | null;
-      
-      if (sectionFile && sectionFile.size > 0) {
-        if (sectionFile.size > MAX_FILE_SIZE) {
-          return NextResponse.json({ success: false, message: `Section image for '${section.title || `Section ${sIndex + 1}`}' exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB.` }, { status: 400 });
-        }
-        uploadTasks.push({
-          file: sectionFile,
-          path: `pages/${slug}/sections`,
-          applyResult: (url) => { section.image = url; }
-        });
-      }
-
-      for (let iIndex = 0; iIndex < section.items.length; iIndex++) {
-        const item = section.items[iIndex];
-        const itemFile = formData.get(`item_${sIndex}_${iIndex}_image`) as File | null;
-
-        if (itemFile && itemFile.size > 0) {
-          if (itemFile.size > MAX_FILE_SIZE) {
-            return NextResponse.json({ success: false, message: `Item image for '${item.title || `Item ${iIndex + 1}`}' exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB.` }, { status: 400 });
-          }
-          uploadTasks.push({
-            file: itemFile,
-            path: `pages/${slug}/items`,
-            applyResult: (url) => { item.image = url; }
-          });
-        }
+    for (const [index, stat] of statsValidation.data.entries()) {
+      const { id, ...statData } = stat;
+      if (id) {
+        await prisma.pageStat.update({ where: { id }, data: { ...statData, order: index } });
+      } else {
+        await prisma.pageStat.create({ data: { ...statData, order: index, pageId: savedPage.id } });
       }
     }
 
-   // upload images
-    if (uploadTasks.length > 0) {
-      await Promise.all(
-        uploadTasks.map(async (task) => {
-          const uploadedUrl = await uploadImage(task.file, task.path);
-          task.applyResult(uploadedUrl);
-        })
-      );
-    }
+    // features
+    const incomingFeatureIds = featuresValidation.data.map(f => f.id).filter(Boolean) as string[];
 
-    if (existingPage) {
-      const oldImages = [
-        existingPage.heroImage,
-        ...existingPage.sections.map(s => s.image),
-        ...existingPage.sections.flatMap(s => s.items.map(i => i.image))
-      ].filter(Boolean) as string[];
+    await prisma.pageFeature.deleteMany({
+      where: { pageId: savedPage.id, id: { notIn: incomingFeatureIds } }
+    });
 
-      const newImages = [
-        heroImagePath,
-        ...data.sections.map((s: any) => s.image),
-        ...data.sections.flatMap((s: any) => s.items.map((i: any) => i.image))
-      ].filter(Boolean) as string[];
-
-      const imagesToDelete = oldImages.filter(oldImg => !newImages.includes(oldImg));
-      
-      if (imagesToDelete.length > 0) {
-        await Promise.all(imagesToDelete.map(imgUrl => deleteFile(imgUrl)));
+    for (const [index, feature] of featuresValidation.data.entries()) {
+      const { id, ...featureData } = feature;
+      if (id) {
+        await prisma.pageFeature.update({ where: { id }, data: { ...featureData, order: index } });
+      } else {
+        await prisma.pageFeature.create({ data: { ...featureData, order: index, pageId: savedPage.id } });
       }
     }
 
-    await prisma.$transaction(async (tx) => {
-
-      const page = await tx.dynamicPage.upsert({
-        where: { slug },
-        update: { 
-          heroTitle: data.heroTitle, 
-          heroSubtitle: data.heroSubtitle, 
-          heroDesc: data.heroDesc, 
-          heroImage: heroImagePath 
-        },
-        create: { 
-          slug, 
-          heroTitle: data.heroTitle, 
-          heroSubtitle: data.heroSubtitle, 
-          heroDesc: data.heroDesc, 
-          heroImage: heroImagePath 
-        },
-      });
-
-      const incomingSectionIds = data.sections.map((s: any) => s.id).filter(Boolean) as string[];
-      const incomingItemIds = data.sections.flatMap((s: any) => s.items.map((i: any) => i.id)).filter(Boolean) as string[];
-
-      // Delete nested items
-      await tx.sectionItem.deleteMany({
-        where: {
-          section: { pageId: page.id },
-          id: { notIn: incomingItemIds }
-        }
-      });
-
-      // Delete sections
-      await tx.pageSection.deleteMany({
-        where: {
-          pageId: page.id,
-          id: { notIn: incomingSectionIds }
-        }
-      });
-
-      for (const sec of data.sections) {
-        let currentSection;
-
-        const sectionData = {
-          type: sec.type,
-          order: sec.order,
-          title: sec.title, 
-          subtitle: sec.subtitle, 
-          description: sec.description,
-          image: sec.image, 
-          badgeIcon: sec.badgeIcon, 
-          badgeTitle: sec.badgeTitle,
-          badgeDesc: sec.badgeDesc, 
-          buttonText: sec.buttonText, 
-          buttonLink: sec.buttonLink,
-          tags: sec.tags && sec.tags.length > 0 ? sec.tags : undefined,
-        };
-
-        if (sec.id) {
-          currentSection = await tx.pageSection.upsert({ 
-            where: { id: sec.id }, 
-            update: sectionData,
-            create: { ...sectionData, pageId: page.id }
-          });
-        } else {
-          currentSection = await tx.pageSection.create({ 
-            data: { ...sectionData, pageId: page.id } 
-          });
-        }
-
-        for (const item of sec.items) {
-          const itemData = {
-            order: item.order, 
-            title: item.title, 
-            subtitle: item.subtitle,
-            description: item.description, 
-            icon: item.icon, 
-            image: item.image,
-            bullets: item.bullets && item.bullets.length > 0 ? item.bullets : undefined,
-            extraData: item.extraData ? JSON.stringify(item.extraData) : undefined,
-          };
-
-          if (item.id) {
-            await tx.sectionItem.upsert({ 
-              where: { id: item.id }, 
-              update: itemData,
-              create: { ...itemData, sectionId: currentSection.id }
-            });
-          } else {
-            await tx.sectionItem.create({ 
-              data: { ...itemData, sectionId: currentSection.id } 
-            });
-          }
-        }
-      }
-    }, { timeout: 60000 });
-
-    return NextResponse.json({ success: true, message: "Page saved successfully!" }, { status: 200 });
+    return NextResponse.json({ success: true, message: "Page updated successfully" }, { status: 200 });
 
   } catch {
     return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });

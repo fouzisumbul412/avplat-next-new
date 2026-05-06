@@ -5,53 +5,18 @@ import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 
-const services = [
-  {
-    id: "01",
-    title: "Auto Estimates",
-    desc: "Tired of sending multiple estimates, to multiple customers every day that don’t result in business? Register your services on the platform. Set up your service rate cards one-time and let us do the rest. Estimates will be automatically generated based on your settings.",
-    image: "/images/Earn.png",
-    link: "/service-provider#estimates",
-  },
-  {
-    id: "02",
-    title: "Accept Requests",
-    desc: "One touch is all it takes to accept the service request from your customer – from fuel to catering, from handling to transport, from permits to flight planning. View your service requests by date, tail no, customer or service category.",
-    image: "/images/Accept.png",
-    link: "/service-provider#requests",
-  },
-  {
-    id: "03",
-    title: "Smart Alerts",
-    desc: "An automated tasking and alerting system, as well as a chat system, all perfectly timed keeps you abreast and on top of your trip always.",
-    image: "/images/Manage.png",
-    link: "/service-provider#notifications",
-  },
-  {
-    id: "04",
-    title: "Flexible Changes",
-    desc: "Change in dates. Change in times. Change in destination. Change in passengers. Are you being bombarded with calls and emails? Our platform eliminates these problems, automatically keeps everything coordinated and provides timely alerts on what needs to be done.",
-    image: "/images/Adapt.png",
-    link: "/service-provider#changes",
-  },
-  {
-    id: "05",
-    title: "Quick Payouts",
-    desc: "Prompt bi-weekly settlements increase your cashflow. Eliminate Accounts Receivables hassles.",
-    image: "/images/GetPaid.png",
-    link: "/service-provider#payments",
-  },
-  {
-    id: "06",
-    title: "Smart Billing",
-    desc: "Invoices are auto-generated and customer wallets auto-deducted. View and retrieve your invoices by trip, by date or by service category. Eliminate Accounts Receivable hassles.",
-    image: "/images/GetPaid.png",
-    link: "/service-provider#billing",
-  },
-];
-
-export default function ServicesSection() {
+export default function ServicesSection({ items = [] }: { items: any[] }) {
   const [active, setActive] = useState<number | null>(0);
+
+  const services = items.map((item, i) => ({
+    id: (i + 1).toString().padStart(2, '0'), 
+    title: item.title,
+    desc: item.description,
+    image: item.image,
+    link: item.link || "/service-provider",
+  }));
+
+  if (services.length === 0) return null;
 
   return (
     <section className="w-full bg-black text-white py-16 md:py-24">
@@ -85,7 +50,6 @@ export default function ServicesSection() {
             <div className="absolute top-0 left-0 w-full h-[1px] bg-white/10" />
             <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/10" />
 
-            {/* BACKGROUND */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: active === i ? 1 : 0 }}

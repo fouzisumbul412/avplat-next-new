@@ -4,40 +4,16 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-const steps = [
-  {
-    id: "01",
-    title: "Create Itinerary.",
-    desc: "and Trip Estimates. Instantly!",
-  },
-  {
-    id: "02",
-    title: "Activate Your Trip.",
-    desc: "At the touch of a button!",
-  },
-  {
-    id: "03",
-    title: "Extensive Vendor Network",
-    desc: "No Cascading Costs!",
-  },
-  {
-    id: "04",
-    title: "Activities. ",
-    desc: "Notifications. Keeps you alert!",
-  },
-  {
-    id: "05",
-    title: "Change Itinerary,Passengers.",
-    desc: "As much as you want!",
-  },
-  {
-    id: "06",
-    title: "Pay your Bills. ",
-    desc: "Hassle Free!",
-  },
-];
+export default function RewiredSection({ items = [] }: { items: any[] }) {
+  
+  const steps = items.map((item, i) => ({
+    id: (i + 1).toString().padStart(2, '0'),
+    title: item.title,
+    desc: item.description,
+  }));
 
-export default function RewiredSection() {
+  if (steps.length === 0) return null;
+
   return (
     <section className="w-full bg-white py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -58,23 +34,23 @@ export default function RewiredSection() {
               <div className="text-[#213e76]">Reimagined.</div>
             </motion.h2>
 
-           <Link href="/operators">
-  <motion.button
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.3, duration: 0.6 }}
-    viewport={{ once: true }}
-    className="mt-8 flex items-center gap-3 px-6 py-3 bg-[#213e76] text-white rounded-full group"
-  >
-    <span className="text-sm font-medium">
-      Operate Your Flight
-    </span>
-    <ArrowRight
-      size={18}
-      className="transition-transform duration-300 group-hover:translate-x-1"
-    />
-  </motion.button>
-</Link>
+            <Link href="/operators">
+              <motion.button
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="mt-8 flex items-center gap-3 px-6 py-3 bg-[#213e76] text-white rounded-full group"
+              >
+                <span className="text-sm font-medium">
+                  Operate Your Flight
+                </span>
+                <ArrowRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </motion.button>
+            </Link>
           </div>
 
           {/* RIGHT SIDE */}
@@ -99,11 +75,11 @@ export default function RewiredSection() {
 
                     {/* NUMBER */}
                     <span className="text-gray-400 text-sm min-w-[30px]">
-                     <h6> {step.id}</h6>
+                      <h6> {step.id}</h6>
                     </span>
 
-                    {/* TEXT */}
-                    <p className="text-lg md:text-2xl leading-snug font-semibold">
+                    {/* TEXT: Dynamic bold title and normal description[cite: 20] */}
+                    <p className="text-lg md:text-2xl leading-snug font-semibold text-slate-900">
                       {step.title}{" "}
                       <span className="text-gray-600 font-normal">
                         {step.desc}
