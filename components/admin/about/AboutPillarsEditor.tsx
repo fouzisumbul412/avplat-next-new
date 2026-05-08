@@ -47,7 +47,7 @@ export function AboutPillarsEditor({ pageData, handleChange, pillars, setPillars
                   }} className="w-full px-3 py-2 bg-white text-slate-900 border border-slate-200 rounded-lg text-sm font-medium outline-none" />
                 </div>
               </div>
-              <button onClick={() => setPillars(pillars.filter((_, i) => i !== idx))} className="text-slate-400 hover:text-red-500 mt-6"><Trash2 size={18}/></button>
+              <button onClick={() => setPillars(pillars.filter((_: string, i: number) => i !== idx))} className="text-slate-400 hover:text-red-500 mt-6"><Trash2 size={18}/></button>
             </div>
           ))}
           {pillars.length === 0 && <p className="text-center text-sm text-slate-400 py-4">No pillars added yet.</p>}

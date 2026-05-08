@@ -24,7 +24,7 @@ export function AboutBlueCardEditor({ pageData, handleChange, blueCardValues, se
               <input type="text" value={val} onChange={(e) => {
                 const newVals = [...blueCardValues]; newVals[idx] = e.target.value; setBlueCardValues(newVals);
               }} className="flex-1 px-4 py-2.5 bg-slate-50 text-slate-900 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-[#213e76]" />
-              <button onClick={() => setBlueCardValues(blueCardValues.filter((_, i) => i !== idx))} className="text-slate-400 hover:text-red-500 p-2"><Trash2 size={18}/></button>
+              <button onClick={() => setBlueCardValues(blueCardValues.filter((_: string, i: number) => i !== idx))} className="text-slate-400 hover:text-red-500 p-2"><Trash2 size={18}/></button>
             </div>
           ))}
         </div>
