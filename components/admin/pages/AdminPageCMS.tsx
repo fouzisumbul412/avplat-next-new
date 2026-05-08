@@ -7,6 +7,7 @@ import { Save, Loader2 } from "lucide-react";
 import HeroEditor from "./HeroEditor";
 import StatsEditor from "./StatsEditor";
 import FeaturesEditor from "./FeaturesEditor";
+import { MAX_FILE_SIZE } from "@/lib/constants";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -63,6 +64,10 @@ export default function AdminPageCMS({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > MAX_FILE_SIZE){
+        toast.error(`Image size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB.`);
+        return;
+      }
       setHeroImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
