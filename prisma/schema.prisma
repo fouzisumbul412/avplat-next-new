@@ -168,3 +168,61 @@ model BlogPost {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model AboutContent {
+  id String @id @default("about_content")
+  
+  heroTitle String @default("About AvPlat")
+  heroImage String?
+
+  blueCardTitle String
+  blueCardText String @db.Text
+  blueCardValues String[]
+
+  mainEyebrow String
+  mainTitle String
+  mainText String @db.Text 
+  mainHighlight String
+
+  missionTitle String
+  missionText String @db.Text
+
+  visionTitle String
+  visionText String @db.Text
+
+  serveEyebrow String
+  serveTitle String
+  serveText String @db.Text
+
+  teamTitle String @default("Our commitment to integrity and innovation")
+  teamDescription String @db.Text @default("")
+
+  updatedAt DateTime @updatedAt
+
+  pillars AboutPillar[]
+  teamMembers AboutTeamMember[]
+}
+
+model AboutTeamMember {
+  id String @id @default(uuid())
+  aboutId String @default("about_content")
+  order Int @default(0)
+  
+  name String
+  role String
+  image String 
+  
+  about AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+}
+
+model AboutPillar {
+  id String @id @default(uuid())
+  aboutId String @default("about_content")
+  order Int @default(0)
+  
+  title String
+  description String @db.Text
+  icon String
+  
+  about AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+}
