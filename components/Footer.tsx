@@ -103,49 +103,103 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 text-gray-400">Contact</h4>
 
-            <p className="text-gray-400 mb-2">info@avplat.com</p>
-            <p className="text-gray-400 mb-4">+91 98765 43210</p>
+            <p className="text-gray-400 mb-2">support@avplat.com</p>
+            <p className="text-gray-400 mb-4">+1 647 694 6122</p>
 
             {/* SOCIAL ICONS */}
-            <div className="flex gap-4">
+<div className="flex gap-4">
 
-              {/* Instagram */}
-              <a href="#" className="hover:opacity-70 transition">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
-                </svg>
-              </a>
+  {/* Facebook */}
+  <a
+    href="https://www.facebook.com/avplatapp"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Facebook"
+    className="hover:opacity-70 transition"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-5 h-5"
+    >
+      <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.25 10.44 22v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.25c-1.24 0-1.63.78-1.63 1.56v1.9h2.78l-.44 2.91h-2.34V22C18.34 21.25 22 17.08 22 12.06Z" />
+    </svg>
+  </a>
 
-              {/* LinkedIn */}
-              <a href="#" className="hover:opacity-70 transition">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path d="M6.94 6.5A2.44 2.44 0 1 1 2.06 6.5a2.44 2.44 0 0 1 4.88 0zM3 8.98h3.88V21H3V8.98zM9.34 8.98h3.72v1.64h.05c.52-.98 1.8-2.02 3.7-2.02 3.96 0 4.69 2.6 4.69 5.98V21h-3.88v-5.7c0-1.36-.03-3.1-1.89-3.1-1.9 0-2.19 1.48-2.19 3v5.8H9.34V8.98z"/>
-                </svg>
-              </a>
+  {/* Instagram */}
+  <a
+    href="http://instagram.com/avplatapp"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Instagram"
+    className="hover:opacity-70 transition"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-5 h-5"
+    >
+      <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
+    </svg>
+  </a>
 
-              {/* Twitter */}
-              <a href="#" className="hover:opacity-70 transition">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path d="M22 5.92c-.77.35-1.6.59-2.47.7a4.3 4.3 0 0 0 1.89-2.37 8.6 8.6 0 0 1-2.73 1.04 4.28 4.28 0 0 0-7.3 3.9A12.13 12.13 0 0 1 3.15 4.8a4.28 4.28 0 0 0 1.33 5.71 4.24 4.24 0 0 1-1.94-.54v.05a4.28 4.28 0 0 0 3.44 4.2c-.47.13-.96.2-1.47.2-.36 0-.71-.03-1.05-.1a4.28 4.28 0 0 0 4 2.97A8.6 8.6 0 0 1 2 19.54 12.14 12.14 0 0 0 8.29 21c7.55 0 11.68-6.25 11.68-11.67 0-.18 0-.35-.01-.53A8.36 8.36 0 0 0 22 5.92z"/>
-                </svg>
-              </a>
+  {/* X / Twitter */}
+  <a
+    href="https://x.com/avplatapp"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="X"
+    className="hover:opacity-70 transition"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-5 h-5"
+    >
+      <path d="M18.9 2.5h3.05l-6.66 7.61L23.12 21.5h-6.13l-4.8-6.27-5.49 6.27H3.65l7.12-8.14L3.25 2.5h6.28l4.34 5.73L18.9 2.5Zm-1.07 16.99h1.69L8.62 4.4H6.8l11.03 15.09Z" />
+    </svg>
+  </a>
 
-            </div>
+  {/* LinkedIn */}
+  <a
+    href="https://in.linkedin.com/company/avplatapp"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="LinkedIn"
+    className="hover:opacity-70 transition"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-5 h-5"
+    >
+      <path d="M6.94 6.5A2.44 2.44 0 1 1 2.06 6.5a2.44 2.44 0 0 1 4.88 0zM3 8.98h3.88V21H3V8.98zM9.34 8.98h3.72v1.64h.05c.52-.98 1.8-2.02 3.7-2.02 3.96 0 4.69 2.6 4.69 5.98V21h-3.88v-5.7c0-1.36-.03-3.1-1.89-3.1-1.9 0-2.19 1.48-2.19 3v5.8H9.34V8.98z" />
+    </svg>
+  </a>
+
+  {/* YouTube */}
+  <a
+    href="https://www.youtube.com/channel/UC-yVUllAcKgenVuAvDTL8iQ"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="YouTube"
+    className="hover:opacity-70 transition"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-5 h-5"
+    >
+      <path d="M23.5 6.2a3.01 3.01 0 0 0-2.12-2.13C19.5 3.56 12 3.56 12 3.56s-7.5 0-9.38.51A3.01 3.01 0 0 0 .5 6.2C0 8.08 0 12 0 12s0 3.92.5 5.8a3.01 3.01 0 0 0 2.12 2.13c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.01 3.01 0 0 0 2.12-2.13c.5-1.88.5-5.8.5-5.8s0-3.92-.5-5.8ZM9.75 15.02V8.98L15.5 12l-5.75 3.02Z" />
+    </svg>
+  </a>
+
+</div>
           </div>
         </div>
 
