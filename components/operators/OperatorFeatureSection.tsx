@@ -78,6 +78,11 @@ function MobileFrameBlock({
   const accentGlow =
     accent === "blue" ? "bg-[#213e76]/12" : "bg-slate-300/40";
 
+  let formattedLink = link;
+  if (formattedLink && !formattedLink.startsWith('http://') && !formattedLink.startsWith('https://')) {
+    formattedLink = `https://${formattedLink}`;
+  }
+
   const FrameContent = (
     <motion.div
       whileHover={{
@@ -128,11 +133,11 @@ function MobileFrameBlock({
     </motion.div>
   );
 
-  if (link) {
+  if (formattedLink) {
     return (
       <div className="relative [perspective:1600px]">
         <a
-          href={link}
+          href={formattedLink}
           target="_blank"
           rel="noreferrer"
           aria-label={`Open video for ${title}`}
