@@ -13,37 +13,24 @@ import ScrollRevealText from "./ScrollRevealText";
 
 export type OperatorFeature = {
   id: string;
-  eyebrow: string;
+  eyebrow?: string | null;
   title: string;
   description: string;
   points: string[];
 
-  /**
-   * Old field kept for safety.
-   * You can still keep videoId in your API data,
-   * but this component now uses previewImage + previewLink.
-   */
-  videoId?: string;
+  videoId?: string | null;
+  videoThumbnail?: string | null; 
 
-  /**
-   * New mobile-frame image fields.
-   * Use any one of these from CMS/API.
-   */
   previewImage?: string;
   mobileImage?: string;
   image?: string;
   thumbnail?: string;
-
-  /**
-   * New clickable redirect fields.
-   * Use any one of these from CMS/API.
-   */
   previewLink?: string;
   redirectUrl?: string;
   link?: string;
   videoUrl?: string;
 
-  icon: LucideIcon;
+  icon: any; 
   accent?: "blue" | "slate";
   layout?: "leftText" | "rightText" | "centerSplit";
 };
@@ -110,14 +97,13 @@ function MobileFrameBlock({
       />
       <div className="absolute -right-8 bottom-10 h-32 w-32 rounded-full bg-sky-100 blur-3xl" />
 
-      <div className="relative rounded-[34px]  p-4  backdrop-blur">
+      <div className="relative rounded-[34px] p-4 backdrop-blur">
         <div className="relative mx-auto aspect-[13/28] w-[min(72vw,260px)] overflow-hidden rounded-[2.3rem] border-[5px] border-[#111827] bg-[#111827] shadow-2xl sm:w-[280px] lg:w-[300px]">
           {/* Phone Notch */}
           <div className="absolute left-0 top-0 z-20 flex h-9 w-full items-center justify-center">
             <div className="h-4 w-20 rounded-full bg-black/80" />
           </div>
 
-          {/* Mobile Image */}
           <img
             src={imageSrc}
             alt={title}
@@ -128,7 +114,7 @@ function MobileFrameBlock({
           {/* Soft Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/18" />
 
-          {/* Play Button */}
+          {/* Play Button Icon */}
           <div className="absolute inset-0 z-30 flex items-center justify-center">
             <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/20 shadow-[0_12px_30px_rgba(0,0,0,0.25)] backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
               <Play className="ml-1 h-7 w-7 fill-white text-white" />
@@ -149,7 +135,7 @@ function MobileFrameBlock({
           href={link}
           target="_blank"
           rel="noreferrer"
-          aria-label={`Open ${title}`}
+          aria-label={`Open video for ${title}`}
           className="group block"
         >
           {FrameContent}
@@ -240,6 +226,7 @@ export default function OperatorFeatureSection({
   const centerSplit = feature.layout === "centerSplit";
 
   const previewImage =
+    feature.videoThumbnail ||
     feature.previewImage ||
     feature.mobileImage ||
     feature.image ||
@@ -247,6 +234,7 @@ export default function OperatorFeatureSection({
     "/images/step-1.png";
 
   const previewLink =
+    feature.videoId ||
     feature.previewLink ||
     feature.redirectUrl ||
     feature.link ||

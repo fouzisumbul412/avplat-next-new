@@ -83,7 +83,18 @@ export default function AdminPageCMS({
       formData.append("heroDescription", heroData.heroDescription);
       
       formData.append("stats", JSON.stringify(stats));
-      formData.append("features", JSON.stringify(features));
+
+      const featuresPayload = features.map(f => {
+        const { newThumbnailFile, ...rest } = f;
+        return rest; 
+      });
+      formData.append("features", JSON.stringify(featuresPayload));
+
+      features.forEach((feature, index) => {
+        if (feature.newThumbnailFile) {
+          formData.append(`featureThumbnail_${index}`, feature.newThumbnailFile);
+        }
+      });
 
       if (heroImageFile) {
         formData.append("heroImage", heroImageFile);
@@ -98,6 +109,9 @@ export default function AdminPageCMS({
       if (result.success) {
         toast.success(`${headerTitle} updated successfully!`);
         setHeroImageFile(null);
+      
+        setFeatures(prev => prev.map(f => ({ ...f, newThumbnailFile: undefined })));
+        
         mutate();
       } else {
         toast.error(result.message || "Failed to update page.");

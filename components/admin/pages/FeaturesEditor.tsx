@@ -3,8 +3,10 @@
 import React from "react";
 import { 
   Layout, Plus, Trash2, Play, ListChecks, 
-  Palette, Info, Type, Settings2, X 
+  Palette, Info, Type, Settings2, X, Image as ImageIcon 
 } from "lucide-react";
+import toast from "react-hot-toast";
+import { MAX_FILE_SIZE } from "@/lib/constants";
 
 interface FeatureItem {
   id?: string;
@@ -13,6 +15,8 @@ interface FeatureItem {
   description: string;
   points: string[];
   videoId: string;
+  videoThumbnail?: string | null; 
+  newThumbnailFile?: File | null;
   icon: string;
   accent: "blue" | "slate";
   layout: "leftText" | "rightText" | "centerSplit";
@@ -27,7 +31,7 @@ export default function FeaturesEditor({
 }) {
   const addFeature = () => setFeatures([...features, { 
     eyebrow: "", title: "", description: "", points: [""], 
-    videoId: "", icon: "Plane", accent: "blue", layout: "leftText" 
+    videoId: "", videoThumbnail: null, newThumbnailFile: null, icon: "Plane", accent: "blue", layout: "leftText" 
   }]);
 
   const removeFeature = (idx: number) => setFeatures(features.filter((_, i) => i !== idx));
@@ -52,6 +56,17 @@ export default function FeaturesEditor({
   const removePoint = (fIdx: number, pIdx: number) => {
     const newPoints = features[fIdx].points.filter((_, i) => i !== pIdx);
     updateFeature(fIdx, { points: newPoints });
+  };
+
+  const handleThumbnailChange = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error(`Thumbnail must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB.`);
+        return;
+      }
+      updateFeature(idx, { newThumbnailFile: file });
+    }
   };
 
   return (
@@ -93,8 +108,30 @@ export default function FeaturesEditor({
                     <input type="text" value={f.eyebrow} onChange={(e) => updateFeature(idx, { eyebrow: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium outline-none focus:ring-2 focus:ring-[#213e76]/10" placeholder="e.g. Plan Faster" />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><Play size={12}/> YouTube Video URL</label>
-                    <input type="text" value={f.videoId} onChange={(e) => updateFeature(idx, { videoId: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium outline-none focus:ring-2 focus:ring-[#213e76]/10" placeholder="e.g. https://www.youtube.com" />
+                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><Play size={12}/> Video URL</label>
+                    <input type="text" value={f.videoId} onChange={(e) => updateFeature(idx, { videoId: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium outline-none focus:ring-2 focus:ring-[#213e76]/10" placeholder="e.g. https://www.youtube.com/..." />
+                  </div>
+                </div>
+
+                {/* THUMBNAIL UPLOAD UI */}
+                <div className="space-y-1.5 bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-3">
+                    <ImageIcon size={14}/> Custom Video Thumbnail
+                  </label>
+                  <div className="flex items-center gap-4">
+                     <div className="w-20 h-14 bg-white rounded-lg overflow-hidden border border-slate-200 flex-shrink-0 relative">
+                        {(f.newThumbnailFile || f.videoThumbnail) ? (
+                           <img src={f.newThumbnailFile ? URL.createObjectURL(f.newThumbnailFile) : f.videoThumbnail!} className="w-full h-full object-cover" alt="thumb" />
+                        ) : (
+                           <div className="w-full h-full flex items-center justify-center text-slate-300"><ImageIcon size={18}/></div>
+                        )}
+                     </div>
+                     <input 
+                       type="file" 
+                       accept="image/*" 
+                       onChange={(e) => handleThumbnailChange(idx, e)} 
+                       className="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#213e76]/10 file:text-[#213e76] hover:file:bg-[#213e76]/20 cursor-pointer transition-colors" 
+                     />
                   </div>
                 </div>
 

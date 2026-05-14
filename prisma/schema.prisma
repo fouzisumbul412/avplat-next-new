@@ -107,6 +107,7 @@ model PageFeature {
   description String
   points      String[]
   videoId     String?
+  videoThumbnail String?
   icon        String?
   accent      AccentColor   @default(blue)
   layout      FeatureLayout @default(leftText)

@@ -25,6 +25,7 @@ const featureSchema = z.object({
   description: z.string().min(1, "Feature description is required"),
   points: z.array(z.string()),
   videoId: z.string().optional().nullable(),
+  videoThumbnail: z.string().optional().nullable(),
   icon: z.string().optional().nullable(),
   accent: z.enum(["blue", "slate"]).default("blue"),
   layout: z.enum(["leftText", "rightText", "centerSplit"]).default("leftText"),
@@ -65,14 +66,15 @@ export async function POST( req: NextRequest, { params }: { params: Promise<{ sl
       return NextResponse.json({ success: false, message: "Invalid features format" }, { status: 400 });
     }
 
-    const existingPage = await prisma.featurePage.findUnique({ where: { slug } });
+    const existingPage = await prisma.featurePage.findUnique({ 
+      where: { slug },
+      include: { features: true } 
+    });
 
-    // image upload
     let heroImage = existingPage?.heroImage || null;
     const imageFile = formData.get("heroImage") as File | null;
 
     if (imageFile && imageFile.size > 0 && imageFile.name !== 'undefined') {
-
       if (imageFile.size > MAX_FILE_SIZE){
         return NextResponse.json({ success: false, message: `Image size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB` }, { status: 400 });
       }
@@ -89,7 +91,6 @@ export async function POST( req: NextRequest, { params }: { params: Promise<{ sl
       create: { slug, ...pageValidation.data, heroImage }
     });
 
-    // stats
     const incomingStatIds = statsValidation.data.map(s => s.id).filter(Boolean) as string[];
 
     await prisma.pageStat.deleteMany({
@@ -105,8 +106,13 @@ export async function POST( req: NextRequest, { params }: { params: Promise<{ sl
       }
     }
 
-    // features
     const incomingFeatureIds = featuresValidation.data.map(f => f.id).filter(Boolean) as string[];
+
+    const existingFeatures = existingPage?.features || [];
+    const featuresToDelete = existingFeatures.filter(f => !incomingFeatureIds.includes(f.id));
+    for (const f of featuresToDelete) {
+      if (f.videoThumbnail) await deleteFile(f.videoThumbnail);
+    }
 
     await prisma.pageFeature.deleteMany({
       where: { pageId: savedPage.id, id: { notIn: incomingFeatureIds } }
@@ -114,10 +120,36 @@ export async function POST( req: NextRequest, { params }: { params: Promise<{ sl
 
     for (const [index, feature] of featuresValidation.data.entries()) {
       const { id, ...featureData } = feature;
+      
+      let videoThumbnailUrl = featureData.videoThumbnail || null;
+      
+      const thumbnailFile = formData.get(`featureThumbnail_${index}`) as File | null;
+
+      if (thumbnailFile && thumbnailFile.size > 0 && thumbnailFile.name !== 'undefined') {
+        if (thumbnailFile.size > MAX_FILE_SIZE) {
+           return NextResponse.json({ success: false, message: `Thumbnail for feature ${index + 1} exceeds size limit.` }, { status: 400 });
+        }
+
+        if (id) {
+           const existingFeature = existingFeatures.find(f => f.id === id);
+           if (existingFeature?.videoThumbnail) {
+              await deleteFile(existingFeature.videoThumbnail);
+           }
+        }
+
+        videoThumbnailUrl = await uploadImage(thumbnailFile, `features/thumbnails/${slug}`);
+      }
+
+      const finalFeatureData = { 
+        ...featureData, 
+        videoThumbnail: videoThumbnailUrl, 
+        order: index 
+      };
+
       if (id) {
-        await prisma.pageFeature.update({ where: { id }, data: { ...featureData, order: index } });
+        await prisma.pageFeature.update({ where: { id }, data: finalFeatureData });
       } else {
-        await prisma.pageFeature.create({ data: { ...featureData, order: index, pageId: savedPage.id } });
+        await prisma.pageFeature.create({ data: { ...finalFeatureData, pageId: savedPage.id } });
       }
     }
 
