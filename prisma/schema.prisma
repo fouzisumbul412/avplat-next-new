@@ -6,47 +6,38 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String
-  name     String?
-  role     Role    @default(USER)
-
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model ZohoAuth {
   id          String   @id @default("zoho_token")
-  accessToken String   @db.Text
+  accessToken String
   expiresAt   DateTime
   updatedAt   DateTime @updatedAt
 }
 
 model QuoteRequest {
-  id String @id @default(uuid())
-
-  fullName String
-  phone    String
-  email    String
-  subject  String
-  services String[]
-  message  String @db.Text
-
+  id         String   @id @default(uuid())
+  fullName   String
+  phone      String
+  email      String
+  services   String[]
+  message    String
   zohoSynced Boolean  @default(false)
   zohoId     String?
   createdAt  DateTime @default(now())
+  subject    String
 }
 
 model CharterRequest {
-  id String @id @default(uuid())
-
+  id            String    @id @default(uuid())
   name          String
   email         String
   phone         String
@@ -55,24 +46,136 @@ model CharterRequest {
   passengers    String
   departureDate DateTime
   returnDate    DateTime?
-
-  zohoSynced Boolean  @default(false)
-  zohoId     String?
-  createdAt  DateTime @default(now())
+  zohoSynced    Boolean   @default(false)
+  zohoId        String?
+  createdAt     DateTime  @default(now())
 }
 
 model HomeContent {
-  id           String   @id @default("home_content")
-  titleBlack   String   @default("Why")
-  titleBlue    String   @default("AvPlat")
-  description  String   @db.Text
+  id           String            @id @default("home_content")
+  titleBlack   String            @default("Why")
+  titleBlue    String            @default("AvPlat")
+  description  String
   videoUrl     String
   appStoreUrl  String?
   playStoreUrl String?
-
-  updatedAt    DateTime @updatedAt
-
+  updatedAt    DateTime          @updatedAt
   items        HomeSectionItem[]
+}
+
+model HomeSectionItem {
+  id          String          @id @default(uuid())
+  homeId      String          @default("home_content")
+  section     HomeSectionType
+  order       Int             @default(0)
+  title       String
+  description String
+  image       String?
+  link        String?
+  home        HomeContent     @relation(fields: [homeId], references: [id], onDelete: Cascade)
+}
+
+model FeaturePage {
+  id              String        @id @default(uuid())
+  slug            String        @unique
+  pageTitle       String
+  heroImage       String?
+  badgeText       String?
+  heroTitle       String
+  heroDescription String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  features        PageFeature[]
+  stats           PageStat[]
+}
+
+model PageStat {
+  id     String      @id @default(uuid())
+  pageId String
+  order  Int         @default(0)
+  label  String
+  value  String
+  page   FeaturePage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+}
+
+model PageFeature {
+  id          String        @id @default(uuid())
+  pageId      String
+  order       Int           @default(0)
+  eyebrow     String?
+  title       String
+  description String
+  points      String[]
+  videoId     String?
+  icon        String?
+  accent      AccentColor   @default(blue)
+  layout      FeatureLayout @default(leftText)
+  page        FeaturePage   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+}
+
+model BlogPost {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  title     String
+  excerpt   String
+  thumbnail String
+  category  String
+  content   String
+  author    String   @default("Skyblue Aero")
+  readTime  String   @default("5 min read")
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AboutContent {
+  id              String            @id @default("about_content")
+  heroTitle       String            @default("About AvPlat")
+  heroImage       String?
+  blueCardTitle   String
+  blueCardText    String
+  blueCardValues  String[]
+  mainEyebrow     String
+  mainTitle       String
+  mainText        String
+  mainHighlight   String
+  missionTitle    String
+  missionText     String
+  visionTitle     String
+  visionText      String
+  serveEyebrow    String
+  serveTitle      String
+  serveText       String
+  updatedAt       DateTime          @updatedAt
+  teamDescription String            @default("")
+  teamTitle       String            @default("Our commitment to integrity and innovation")
+  pillars         AboutPillar[]
+  teamMembers     AboutTeamMember[]
+}
+
+model AboutTeamMember {
+  id      String       @id @default(uuid())
+  aboutId String       @default("about_content")
+  order   Int          @default(0)
+  name    String
+  role    String
+  image   String
+  about   AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+}
+
+model AboutPillar {
+  id          String       @id @default(uuid())
+  aboutId     String       @default("about_content")
+  order       Int          @default(0)
+  title       String
+  description String
+  icon        String
+  about       AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 enum HomeSectionType {
@@ -80,21 +183,6 @@ enum HomeSectionType {
   CAROUSEL
   SERVICES
   REWIRED
-}
-
-model HomeSectionItem {
-  id          String   @id @default(uuid())
-  homeId      String   @default("home_content")
-  
-  section     HomeSectionType
-  order       Int      @default(0)
-  
-  title       String
-  description String   @db.Text
-  image       String?
-  link        String?
-  
-  home        HomeContent @relation(fields: [homeId], references: [id], onDelete: Cascade)
 }
 
 enum AccentColor {
@@ -106,123 +194,4 @@ enum FeatureLayout {
   leftText
   rightText
   centerSplit
-}
-
-model FeaturePage {
-  id String @id @default(uuid())
-  slug String @unique
-  
-  pageTitle String   
-  heroImage String?  
-  badgeText String?  
-  heroTitle String   
-  heroDescription String @db.Text
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  stats PageStat[]
-  features PageFeature[]
-}
-
-model PageStat {
-  id String @id @default(uuid())
-  pageId String
-  order Int @default(0)
-  label String
-  value String
-  
-  page FeaturePage @relation(fields: [pageId], references: [id], onDelete: Cascade)
-}
-
-model PageFeature {
-  id String @id @default(uuid())
-  pageId String
-  order Int @default(0)
-  
-  eyebrow String?
-  title String
-  description String @db.Text
-  points String[]
-  videoId String?
-  icon String?
-  accent AccentColor @default(blue)
-  layout FeatureLayout @default(leftText)
-
-  page FeaturePage @relation(fields: [pageId], references: [id], onDelete: Cascade)
-}
-
-model BlogPost {
-  id String @id @default(uuid())
-
-  slug      String  @unique
-  title     String
-  excerpt   String  @db.Text
-  thumbnail String
-  category  String
-  content   String  @db.Text
-  author    String  @default("Skyblue Aero")
-  readTime  String  @default("5 min read")
-  published Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model AboutContent {
-  id String @id @default("about_content")
-  
-  heroTitle String @default("About AvPlat")
-  heroImage String?
-
-  blueCardTitle String
-  blueCardText String @db.Text
-  blueCardValues String[]
-
-  mainEyebrow String
-  mainTitle String
-  mainText String @db.Text 
-  mainHighlight String
-
-  missionTitle String
-  missionText String @db.Text
-
-  visionTitle String
-  visionText String @db.Text
-
-  serveEyebrow String
-  serveTitle String
-  serveText String @db.Text
-
-  teamTitle String @default("Our commitment to integrity and innovation")
-  teamDescription String @db.Text @default("")
-
-  updatedAt DateTime @updatedAt
-
-  pillars AboutPillar[]
-  teamMembers AboutTeamMember[]
-}
-
-model AboutTeamMember {
-  id String @id @default(uuid())
-  aboutId String @default("about_content")
-  order Int @default(0)
-  
-  name String
-  role String
-  image String 
-  
-  about AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
-}
-
-model AboutPillar {
-  id String @id @default(uuid())
-  aboutId String @default("about_content")
-  order Int @default(0)
-  
-  title String
-  description String @db.Text
-  icon String
-  
-  about AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
 }

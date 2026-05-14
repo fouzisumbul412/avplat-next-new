@@ -8,7 +8,7 @@ import {
   type Variants,
 } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Play } from "lucide-react";
 import ScrollRevealText from "./ScrollRevealText";
 
 export type OperatorFeature = {
@@ -17,7 +17,32 @@ export type OperatorFeature = {
   title: string;
   description: string;
   points: string[];
-  videoId: string;
+
+  /**
+   * Old field kept for safety.
+   * You can still keep videoId in your API data,
+   * but this component now uses previewImage + previewLink.
+   */
+  videoId?: string;
+
+  /**
+   * New mobile-frame image fields.
+   * Use any one of these from CMS/API.
+   */
+  previewImage?: string;
+  mobileImage?: string;
+  image?: string;
+  thumbnail?: string;
+
+  /**
+   * New clickable redirect fields.
+   * Use any one of these from CMS/API.
+   */
+  previewLink?: string;
+  redirectUrl?: string;
+  link?: string;
+  videoUrl?: string;
+
   icon: LucideIcon;
   accent?: "blue" | "slate";
   layout?: "leftText" | "rightText" | "centerSplit";
@@ -52,77 +77,88 @@ const listItem: Variants = {
   },
 };
 
-function extractYouTubeId(urlOrId: string) {
-  if (!urlOrId) return "";
-  
-  if (urlOrId.length === 11 && !urlOrId.includes("/") && !urlOrId.includes(".")) {
-    return urlOrId;
-  }
-
-  const match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]{11})/);
-  
-  return match ? match[1] : urlOrId; 
-}
-
-function VideoBlock({
+function MobileFrameBlock({
   title,
-  videoId,
+  imageSrc,
+  link,
   accent = "blue",
 }: {
   title: string;
-  videoId: string;
+  imageSrc: string;
+  link?: string;
   accent?: "blue" | "slate";
 }) {
   const accentGlow =
     accent === "blue" ? "bg-[#213e76]/12" : "bg-slate-300/40";
 
-  const parsedVideoId = extractYouTubeId(videoId);
+  const FrameContent = (
+    <motion.div
+      whileHover={{
+        y: -5,
+        rotateX: 2,
+        rotateY: -3,
+      }}
+      transition={{
+        duration: 0.35,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      style={{ transformStyle: "preserve-3d" }}
+      className="relative mx-auto flex justify-center"
+    >
+      <div
+        className={`absolute -left-8 top-10 h-28 w-28 rounded-full blur-3xl ${accentGlow}`}
+      />
+      <div className="absolute -right-8 bottom-10 h-32 w-32 rounded-full bg-sky-100 blur-3xl" />
 
-  return (
-    <div className="relative [perspective:1600px]">
-      <motion.div
-        whileHover={{
-          y: -4,
-          rotateX: 2,
-          rotateY: -3,
-        }}
-        transition={{
-          duration: 0.35,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        style={{ transformStyle: "preserve-3d" }}
-        className="relative"
-      >
-        <div
-          className={`absolute -left-4 top-8 h-24 w-24 rounded-full blur-3xl ${accentGlow}`}
-        />
-        <div className="absolute -right-4 bottom-8 h-28 w-28 rounded-full bg-sky-100 blur-3xl" />
+      <div className="relative rounded-[34px]  p-4  backdrop-blur">
+        <div className="relative mx-auto aspect-[13/28] w-[min(72vw,260px)] overflow-hidden rounded-[2.3rem] border-[5px] border-[#111827] bg-[#111827] shadow-2xl sm:w-[280px] lg:w-[300px]">
+          {/* Phone Notch */}
+          <div className="absolute left-0 top-0 z-20 flex h-9 w-full items-center justify-center">
+            <div className="h-4 w-20 rounded-full bg-black/80" />
+          </div>
 
-        <div className="rounded-[28px] border border-slate-200/80 bg-white p-3 shadow-[0_20px_50px_rgba(18,38,63,0.08)]">
-          <div className="mb-3 flex items-center justify-between rounded-[18px] border border-slate-200/80 bg-[#f7faff] px-4 py-3">
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#213e76]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
-              <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+          {/* Mobile Image */}
+          <img
+            src={imageSrc}
+            alt={title}
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
+
+          {/* Soft Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/18" />
+
+          {/* Play Button */}
+          <div className="absolute inset-0 z-30 flex items-center justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/20 shadow-[0_12px_30px_rgba(0,0,0,0.25)] backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+              <Play className="ml-1 h-7 w-7 fill-white text-white" />
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-[22px] border border-slate-200 bg-white">
-            <div className="aspect-[16/10] w-full">
-              <iframe
-                className="h-full w-full"
-                src={`https://www.youtube.com/embed/${parsedVideoId}?rel=0&modestbranding=1&playsinline=1`}
-                title={title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            </div>
-          </div>
+          {/* Bottom Shine */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/25 to-transparent" />
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
+
+  if (link) {
+    return (
+      <div className="relative [perspective:1600px]">
+        <a
+          href={link}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Open ${title}`}
+          className="group block"
+        >
+          {FrameContent}
+        </a>
+      </div>
+    );
+  }
+
+  return <div className="relative [perspective:1600px]">{FrameContent}</div>;
 }
 
 function TextBlock({
@@ -203,14 +239,29 @@ export default function OperatorFeatureSection({
   const rightText = feature.layout === "rightText";
   const centerSplit = feature.layout === "centerSplit";
 
+  const previewImage =
+    feature.previewImage ||
+    feature.mobileImage ||
+    feature.image ||
+    feature.thumbnail ||
+    "/images/step-1.png";
+
+  const previewLink =
+    feature.previewLink ||
+    feature.redirectUrl ||
+    feature.link ||
+    feature.videoUrl ||
+    "";
+
   if (centerSplit) {
     return (
       <section ref={ref} id={feature.id} className="py-2">
         <div className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-6">
           <motion.div style={{ y: videoY }} className="order-1 lg:order-2">
-            <VideoBlock
+            <MobileFrameBlock
               title={feature.title}
-              videoId={feature.videoId}
+              imageSrc={previewImage}
+              link={previewLink}
               accent={feature.accent}
             />
           </motion.div>
@@ -229,9 +280,10 @@ export default function OperatorFeatureSection({
         {leftText && (
           <>
             <motion.div style={{ y: videoY }} className="order-1 lg:order-2">
-              <VideoBlock
+              <MobileFrameBlock
                 title={feature.title}
-                videoId={feature.videoId}
+                imageSrc={previewImage}
+                link={previewLink}
                 accent={feature.accent}
               />
             </motion.div>
@@ -245,9 +297,10 @@ export default function OperatorFeatureSection({
         {rightText && (
           <>
             <motion.div style={{ y: videoY }} className="order-1 lg:order-1">
-              <VideoBlock
+              <MobileFrameBlock
                 title={feature.title}
-                videoId={feature.videoId}
+                imageSrc={previewImage}
+                link={previewLink}
                 accent={feature.accent}
               />
             </motion.div>

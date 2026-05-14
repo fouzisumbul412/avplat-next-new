@@ -134,7 +134,7 @@ export default function ContactPage() {
     <main className="min-h-screen bg-white text-black">
       <PageHero
         title="Contact AvPlat"
-        image="/images/operator.png"
+        image="/images/contact.jpg"
         overlayOpacity={0.65}
       />
 

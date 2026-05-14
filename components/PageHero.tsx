@@ -13,7 +13,7 @@ export default function PageHero({
 }: PageHeroProps) {
   return (
     <section
-      className="relative w-full h-[300px] flex items-center justify-center text-center"
+      className="relative w-full h-[400px] flex items-center justify-center text-center"
       style={{
         backgroundImage: `url(${image})`,
         backgroundSize: "cover",
